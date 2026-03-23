@@ -1,0 +1,98 @@
+[gd_scene load_steps=8 format=3 uid="uid://bjjj0bup4gto5"]
+
+[ext_resource type="Script" path="res://scenes/world/WorldRoot.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/PuzzleStone.tscn" id="2_stone"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/ResourceNode.tscn" id="3_resource"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/SageNPC.tscn" id="4_sage"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/Gate.tscn" id="5_gate"]
+
+[node name="WorldRoot" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Ground" type="ColorRect" parent="."]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.08, 0.11, 0.1, 1)
+
+[node name="ChaosLayer" type="Node2D" parent="."]
+
+[node name="ChaosField" type="Polygon2D" parent="ChaosLayer"]
+color = Color(0.15, 0.23, 0.18, 1)
+polygon = PackedVector2Array(80, 620, 260, 220, 520, 120, 760, 180, 1120, 420, 1180, 640)
+
+[node name="Instruction" type="Label" parent="ChaosLayer"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 700.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 24
+text = "E로 상호작용 | 순서의 돌 1→2→3, 돌 5개, 씨앗 6개를 통해 문명을 해금하세요."
+
+[node name="PuzzleStone1" parent="ChaosLayer" instance=ExtResource("2_stone")]
+position = Vector2(320, 420)
+order_number = 1
+
+[node name="PuzzleStone2" parent="ChaosLayer" instance=ExtResource("2_stone")]
+position = Vector2(480, 340)
+order_number = 2
+
+[node name="PuzzleStone3" parent="ChaosLayer" instance=ExtResource("2_stone")]
+position = Vector2(640, 420)
+order_number = 3
+
+[node name="SageNPC" parent="ChaosLayer" instance=ExtResource("4_sage")]
+position = Vector2(900, 300)
+
+[node name="NumberLayer" type="Node2D" parent="."]
+visible = false
+
+[node name="StoneA" parent="NumberLayer" instance=ExtResource("3_resource")]
+position = Vector2(180, 560)
+quantity = 2
+display_name = "돌"
+
+[node name="StoneB" parent="NumberLayer" instance=ExtResource("3_resource")]
+position = Vector2(280, 600)
+quantity = 3
+display_name = "돌"
+
+[node name="SeedA" parent="NumberLayer" instance=ExtResource("3_resource")]
+position = Vector2(980, 520)
+item_id = "seed"
+quantity = 2
+display_name = "씨앗"
+
+[node name="SeedB" parent="NumberLayer" instance=ExtResource("3_resource")]
+position = Vector2(1060, 580)
+item_id = "seed"
+quantity = 2
+display_name = "씨앗"
+
+[node name="SeedC" parent="NumberLayer" instance=ExtResource("3_resource")]
+position = Vector2(1140, 520)
+item_id = "seed"
+quantity = 2
+display_name = "씨앗"
+
+[node name="AdditionLayer" type="Node2D" parent="."]
+visible = false
+
+[node name="Gate" parent="AdditionLayer" instance=ExtResource("5_gate")]
+position = Vector2(640, 160)
+
+[node name="MultiplicationLayer" type="Node2D" parent="."]
+visible = false
+
+[node name="Farm" type="Polygon2D" parent="MultiplicationLayer"]
+color = Color(0.52, 0.42, 0.22, 1)
+polygon = PackedVector2Array(760, 500, 1180, 500, 1180, 680, 760, 680)
+
+[node name="FarmLabel" type="Label" parent="MultiplicationLayer"]
+offset_left = 780.0
+offset_top = 510.0
+offset_right = 1180.0
+offset_bottom = 600.0
+theme_override_font_sizes/font_size = 30
+text = "곱셈의 시대: 반복 생산이 시작되었다."

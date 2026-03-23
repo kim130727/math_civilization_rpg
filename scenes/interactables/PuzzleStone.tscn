@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://dl0g3o3v0y4mw"]
+
+[ext_resource type="Script" path="res://scenes/interactables/PuzzleStone.gd" id="1_script"]
+
+[sub_resource type="CircleShape2D" id="1_circle"]
+radius = 28.0
+
+[node name="PuzzleStone" type="Area2D"]
+script = ExtResource("1_script")
+monitoring = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_circle")
+
+[node name="Visual" type="Polygon2D" parent="."]
+color = Color(0.6, 0.8, 1, 1)
+polygon = PackedVector2Array(-26, -18, 0, -30, 26, -18, 22, 18, -22, 18)

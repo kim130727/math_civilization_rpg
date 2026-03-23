@@ -1,0 +1,19 @@
+[gd_scene load_steps=8 format=3 uid="uid://c8y5xklsn7c4d"]
+
+[ext_resource type="Script" path="res://main/Main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/world/WorldRoot.tscn" id="2_world"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DialogueBox.tscn" id="5_dialogue"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_main")
+
+[node name="WorldRoot" parent="." instance=ExtResource("2_world")]
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector2(640, 520)
+
+[node name="HUD" parent="." instance=ExtResource("4_hud")]
+
+[node name="DialogueBox" parent="." instance=ExtResource("5_dialogue")]
