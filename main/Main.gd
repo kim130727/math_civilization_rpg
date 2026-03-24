@@ -1,26 +1,5 @@
 extends Control
 
-const BOARD_WIDTH := 6
-const BOARD_HEIGHT := 6
-const TILE_SIZE := Vector2(110, 92)
-const TILE_GAP := Vector2(12, 12)
-const BOARD_PADDING := Vector2(8, 8)
-const ANIM_SPEED_SCALE := 0.75
-
-const TILE_BASE := Color("f3ead8")
-const TILE_SELECTED := Color("ffe08a")
-const TILE_MATCHED := Color("b7e4c7")
-const TILE_INVALID := Color("f6c1c1")
-
-const VALUE_COLORS := {
-	1: Color("ffd6a5"),
-	2: Color("fdffb6"),
-	3: Color("caffbf"),
-	4: Color("9bf6ff"),
-	5: Color("a0c4ff"),
-	6: Color("ffc6ff"),
-}
-
 @onready var map_screen: Control = $MapScreen
 @onready var puzzle_screen: Control = $PuzzleScreen
 @onready var chapter_label: Label = $MapScreen/MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox/ChapterLabel
@@ -37,7 +16,7 @@ const VALUE_COLORS := {
 @onready var puzzle_goal_label: Label = $PuzzleScreen/MarginContainer/VBoxContainer/PuzzleHeader/MarginContainer/HeaderVBox/PuzzleGoal
 @onready var puzzle_hint_label: Label = $PuzzleScreen/MarginContainer/VBoxContainer/PuzzleHeader/MarginContainer/HeaderVBox/PuzzleHint
 @onready var puzzle_stats_label: Label = $PuzzleScreen/MarginContainer/VBoxContainer/PuzzleHeader/MarginContainer/HeaderVBox/PuzzleStats
-@onready var board_surface: Control = $PuzzleScreen/MarginContainer/VBoxContainer/PuzzlePanel/MarginContainer/PuzzleGrid
+@onready var board_mount: Match3BoardController = $PuzzleScreen/MarginContainer/VBoxContainer/PuzzlePanel/MarginContainer/PuzzleGrid
 @onready var puzzle_result_label: Label = $PuzzleScreen/MarginContainer/VBoxContainer/PuzzleFooter/ResultLabel
 @onready var clear_button: Button = $PuzzleScreen/MarginContainer/VBoxContainer/PuzzleFooter/ButtonRow/ClearButton
 @onready var back_button: Button = $PuzzleScreen/MarginContainer/VBoxContainer/PuzzleFooter/ButtonRow/BackButton
@@ -45,21 +24,15 @@ const VALUE_COLORS := {
 
 var current_chapter_id := "counting"
 var current_level_id := ""
-var current_level_data: Dictionary = {}
-
-var board_values: Array = []
-var board_tiles: Array = []
-var selected_cell := Vector2i(-1, -1)
-var moves_used := 0
-var goal_progress := 0
-var puzzle_finished := false
-var last_result_was_invalid := false
-var is_animating := false
+var clear_timer: SceneTreeTimer
 
 func _ready() -> void:
-	randomize()
 	PuzzleProgress.progress_changed.connect(_refresh_map_screen)
 	PuzzleProgress.chapter_unlocked.connect(_on_chapter_unlocked)
+	board_mount.header_changed.connect(_on_board_header_changed)
+	board_mount.message_changed.connect(_on_board_message_changed)
+	board_mount.level_completed.connect(_on_board_level_completed)
+	board_mount.out_of_moves.connect(_on_board_out_of_moves)
 	clear_button.pressed.connect(_on_clear_button_pressed)
 	back_button.pressed.connect(_return_to_map)
 
@@ -69,15 +42,18 @@ func _ready() -> void:
 
 func _refresh_map_screen() -> void:
 	var chapter := PuzzleProgress.get_chapter(current_chapter_id)
+	var grade := PuzzleProgress.get_grade(String(chapter.get("grade_id", "")))
 	var completed_levels := PuzzleProgress.get_completed_level_count(current_chapter_id)
 	var total_levels := PuzzleProgress.get_levels_for_chapter(current_chapter_id).size()
 	var total_stars := PuzzleProgress.get_total_stars(current_chapter_id)
 	var available_stars := PuzzleProgress.get_available_stars(current_chapter_id)
 	var restoration_percent := int(round(PuzzleProgress.get_restoration_completion_ratio(current_chapter_id) * 100.0))
 
-	chapter_label.text = "Chapter 1. %s" % chapter.get("title", "Counting Village")
+	var chapter_title := String(chapter.get("title", "Math District"))
+	var grade_title := String(grade.get("title", ""))
+	chapter_label.text = chapter_title if grade_title == "" else "%s - %s" % [grade_title, chapter_title]
 	progress_label.text = "Levels %d/%d   Stars %d   Spendable %d   Restore %d%%" % [completed_levels, total_levels, total_stars, available_stars, restoration_percent]
-	chapter_note_label.text = _get_chapter_note(current_chapter_id)
+	chapter_note_label.text = ChapterRuleLibrary.get_chapter_note(current_chapter_id)
 
 	_rebuild_chapter_tabs()
 	_rebuild_level_buttons()
@@ -85,9 +61,23 @@ func _refresh_map_screen() -> void:
 	_refresh_restoration_preview()
 
 	if PuzzleProgress.is_chapter_unlocked("addition"):
-		addition_teaser_label.text = "Next chapter unlocked: Addition Bridge is now open."
+		addition_teaser_label.text = "Addition Bridge is unlocked. Grade 1 now expands from counting into visible sums."
 	else:
-		addition_teaser_label.text = "Next chapter preview: finish all counting levels and restoration tasks to unlock Addition Bridge."
+		addition_teaser_label.text = "Finish the counting district to unlock the first addition district."
+
+func _rebuild_chapter_tabs() -> void:
+	for child in chapter_tabs.get_children():
+		child.queue_free()
+
+	var current_grade_id := String(PuzzleProgress.get_chapter(current_chapter_id).get("grade_id", "grade1"))
+	for chapter in PuzzleProgress.get_chapters_for_grade(current_grade_id):
+		var chapter_id: String = chapter["id"]
+		var button := Button.new()
+		button.text = chapter["title"]
+		button.custom_minimum_size = Vector2(180, 42)
+		button.disabled = not PuzzleProgress.is_chapter_unlocked(chapter_id) or chapter_id == current_chapter_id
+		button.pressed.connect(_switch_chapter.bind(chapter_id))
+		chapter_tabs.add_child(button)
 
 func _rebuild_level_buttons() -> void:
 	for child in level_grid.get_children():
@@ -104,20 +94,7 @@ func _rebuild_level_buttons() -> void:
 		button.pressed.connect(_open_level.bind(level["id"]))
 		level_grid.add_child(button)
 
-	level_status_label.text = _get_level_status_text(current_chapter_id)
-
-func _rebuild_chapter_tabs() -> void:
-	for child in chapter_tabs.get_children():
-		child.queue_free()
-
-	for chapter in PuzzleProgress.CHAPTERS:
-		var chapter_id: String = chapter["id"]
-		var button := Button.new()
-		button.text = chapter["title"]
-		button.custom_minimum_size = Vector2(180, 42)
-		button.disabled = not PuzzleProgress.is_chapter_unlocked(chapter_id) or chapter_id == current_chapter_id
-		button.pressed.connect(_switch_chapter.bind(chapter_id))
-		chapter_tabs.add_child(button)
+	level_status_label.text = ChapterRuleLibrary.get_level_status_text(current_chapter_id)
 
 func _rebuild_restoration_tasks() -> void:
 	for child in restoration_task_list.get_children():
@@ -135,427 +112,74 @@ func _rebuild_restoration_tasks() -> void:
 		button.pressed.connect(_restore_task.bind(task["id"]))
 		restoration_task_list.add_child(button)
 
-	restoration_status_label.text = "Spend stars to restore the district. Restoration still drives chapter progression."
+	restoration_status_label.text = "Spend stars to restore the district. Restorations scale one district at a time."
 
 func _refresh_restoration_preview() -> void:
 	var ratio := PuzzleProgress.get_restoration_completion_ratio(current_chapter_id)
+	if current_chapter_id == "addition":
+		if ratio <= 0.0:
+			restoration_preview_label.text = "[Broken Bridge]\nStone blocks sit in separated piles.\nThe world is asking for sums."
+		elif ratio < 0.67:
+			restoration_preview_label.text = "[Rising Span]\nSupport pillars align and the bridge starts forming a full arc."
+		else:
+			restoration_preview_label.text = "[Open Crossing]\nThe bridge now supports travelers and grouped supplies."
+		return
+
 	if ratio <= 0.0:
 		restoration_preview_label.text = "[Foggy Square]\nSigns are blurred and objects are mixed together.\nNothing is easy to count yet."
-	elif ratio < 0.34:
-		restoration_preview_label.text = "[Ordered Plaza]\nThe village starts to separate objects into neat groups.\nPeople begin naming what they can count."
 	elif ratio < 0.67:
-		restoration_preview_label.text = "[Bright Street]\nLanterns hang in rhythm and market items line up in visible sets."
-	elif ratio < 1.0:
-		restoration_preview_label.text = "[Living Market]\nShelves, signs, and bundles become readable.\nCounting now feels natural in the world."
+		restoration_preview_label.text = "[Ordered Plaza]\nThe village starts to separate objects into neat groups."
 	else:
-		restoration_preview_label.text = "[Counting Village Complete]\nThe plaza, lantern rows, and market are fully restored.\nAddition is waiting across the bridge."
+		restoration_preview_label.text = "[Counting Village Complete]\nThe plaza, lantern rows, and market are fully restored."
 
 func _open_level(level_id: String) -> void:
 	current_level_id = level_id
-	current_level_data = PuzzleProgress.get_level(level_id)
 	if dialogue_box.has_method("hide_dialogue"):
 		dialogue_box.call("hide_dialogue")
-
-	selected_cell = Vector2i(-1, -1)
-	moves_used = 0
-	goal_progress = 0
-	puzzle_finished = false
-	last_result_was_invalid = false
-	is_animating = false
-
-	_build_match3_board()
-	_refresh_puzzle_header()
-	_refresh_board_visuals()
+	board_mount.play_level(PuzzleProgress.get_level_resource(level_id))
+	clear_button.text = "Restart level"
 	_show_puzzle()
 
-func _build_match3_board() -> void:
-	for child in board_surface.get_children():
-		child.queue_free()
+func _on_board_header_changed(title: String, goal_text: String, hint_text: String, stats_text: String) -> void:
+	puzzle_title_label.text = title
+	puzzle_goal_label.text = goal_text
+	puzzle_hint_label.text = hint_text
+	puzzle_stats_label.text = stats_text
 
-	board_values.clear()
-	board_tiles.clear()
+func _on_board_message_changed(text: String) -> void:
+	puzzle_result_label.text = text
 
-	board_surface.custom_minimum_size = Vector2(
-		BOARD_PADDING.x * 2.0 + BOARD_WIDTH * TILE_SIZE.x + (BOARD_WIDTH - 1) * TILE_GAP.x,
-		BOARD_PADDING.y * 2.0 + BOARD_HEIGHT * TILE_SIZE.y + (BOARD_HEIGHT - 1) * TILE_GAP.y
-	)
+func _on_board_level_completed(stars: int) -> void:
+	PuzzleProgress.complete_level(current_level_id, stars)
+	clear_button.text = "Back to map"
+	_go_to_next_level_after_clear()
 
-	for y in range(BOARD_HEIGHT):
-		board_values.append([])
-		board_tiles.append([])
-		for x in range(BOARD_WIDTH):
-			var value := _roll_value_without_starting_match(x, y)
-			board_values[y].append(value)
-			var tile := _create_tile_node(value)
-			tile.position = _get_cell_position(Vector2i(x, y))
-			board_surface.add_child(tile)
-			board_tiles[y].append(tile)
-
-	while _find_all_matches().size() > 0:
-		_rebuild_board_values()
-
-func _rebuild_board_values() -> void:
-	var palette: Array = current_level_data.get("palette", [1, 2, 3])
-	for y in range(BOARD_HEIGHT):
-		for x in range(BOARD_WIDTH):
-			var value := int(palette[randi() % palette.size()])
-			board_values[y][x] = value
-			var tile: Control = board_tiles[y][x]
-			_set_tile_value(tile, value)
-
-func _create_tile_node(value: int) -> PanelContainer:
-	var tile := PanelContainer.new()
-	tile.custom_minimum_size = TILE_SIZE
-	tile.size = TILE_SIZE
-	tile.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	var label := Label.new()
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	label.add_theme_color_override("font_color", Color("2f2a24"))
-	tile.add_child(label)
-
-	_set_tile_value(tile, value)
-	return tile
-
-func _set_tile_value(tile: Control, value: int) -> void:
-	tile.set_meta("value", value)
-	var label := tile.get_child(0) as Label
-	label.text = _format_group_text(value)
-	tile.add_theme_stylebox_override("panel", _make_tile_style(_get_tile_color(value)))
-
-func _on_tile_pressed(cell: Vector2i) -> void:
-	if is_animating:
-		return
-	if puzzle_finished:
-		puzzle_result_label.text = "Stage already complete. Click Back to map."
-		return
-
-	if selected_cell == Vector2i(-1, -1):
-		selected_cell = cell
-		puzzle_result_label.text = "Selected (%d, %d). Choose an adjacent tile." % [cell.x, cell.y]
-		_refresh_board_visuals()
-		return
-
-	if selected_cell == cell:
-		selected_cell = Vector2i(-1, -1)
-		puzzle_result_label.text = "Selection cleared."
-		_refresh_board_visuals()
-		return
-
-	if not _is_adjacent(selected_cell, cell):
-		selected_cell = cell
-		puzzle_result_label.text = "Only adjacent tiles can swap. New tile selected."
-		_refresh_board_visuals()
-		return
-
-	var should_clear_selection := await _try_swap(selected_cell, cell)
-	if should_clear_selection:
-		selected_cell = Vector2i(-1, -1)
-	_refresh_board_visuals()
-
-func _input(event: InputEvent) -> void:
-	if not puzzle_screen.visible:
-		return
-	if not (event is InputEventMouseButton):
-		return
-	if is_animating:
-		return
-
-	var mouse_event := event as InputEventMouseButton
-	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
-		return
-
-	var cell := _get_cell_at_global_position(mouse_event.position)
-	if cell == Vector2i(-1, -1):
-		return
-
-	_on_tile_pressed(cell)
-
-func _try_swap(cell_a: Vector2i, cell_b: Vector2i) -> bool:
-	is_animating = true
-	var tile_a: Control = board_tiles[cell_a.y][cell_a.x]
-	var tile_b: Control = board_tiles[cell_b.y][cell_b.x]
-	var value_a := _get_board_value(cell_a)
-	var value_b := _get_board_value(cell_b)
-
-	board_tiles[cell_a.y][cell_a.x] = tile_b
-	board_tiles[cell_b.y][cell_b.x] = tile_a
-	_set_board_value(cell_a, value_b)
-	_set_board_value(cell_b, value_a)
-
-	await _animate_tiles_parallel([
-		{"tile": tile_a, "cell": cell_b},
-		{"tile": tile_b, "cell": cell_a},
-	], _anim(0.18))
-
-	var matches := _find_all_matches()
-	moves_used += 1
-
-	if matches.is_empty():
-		board_tiles[cell_a.y][cell_a.x] = tile_a
-		board_tiles[cell_b.y][cell_b.x] = tile_b
-		_set_board_value(cell_a, value_a)
-		_set_board_value(cell_b, value_b)
-
-		last_result_was_invalid = true
-		selected_cell = cell_b
-		puzzle_result_label.text = "No match. The tiles move back."
-		_refresh_puzzle_header()
-		_set_tile_style(tile_a, TILE_INVALID)
-		_set_tile_style(tile_b, TILE_INVALID)
-		await _wait(_anim(0.08))
-		await _animate_tiles_parallel([
-			{"tile": tile_a, "cell": cell_a},
-			{"tile": tile_b, "cell": cell_b},
-		], _anim(0.18))
-		_refresh_board_visuals()
-		_check_for_failure()
-		is_animating = false
-		return false
-
-	last_result_was_invalid = false
-	await _resolve_matches(matches)
-	_refresh_puzzle_header()
-	_check_for_completion()
-	is_animating = false
-	return true
-
-func _resolve_matches(initial_matches: Array) -> void:
-	var cascade_matches: Array = initial_matches
-	var total_progress_gained := 0
-	var cascade_count := 0
-
-	while not cascade_matches.is_empty():
-		cascade_count += 1
-		total_progress_gained += _collect_progress_from_matches(cascade_matches)
-		await _animate_match_clear(cascade_matches)
-		await _collapse_board_with_animation()
-		await _fill_empty_cells_with_animation()
-		cascade_matches = _find_all_matches()
-
-	goal_progress += total_progress_gained
-	puzzle_result_label.text = _get_progress_message(total_progress_gained)
-	if cascade_count > 1:
-		puzzle_result_label.text += " Cascade x%d." % cascade_count
-
-func _animate_match_clear(matches: Array) -> void:
-	for cell in matches:
-		var tile: Control = board_tiles[cell.y][cell.x]
-		if tile != null:
-			_set_tile_style(tile, TILE_MATCHED)
-
-	await _wait(_anim(0.12))
-
-	var tween := create_tween()
-	for cell in matches:
-		var tile: Control = board_tiles[cell.y][cell.x]
-		if tile == null:
-			continue
-		tween.parallel().tween_property(tile, "scale", Vector2(0.2, 0.2), _anim(0.14))
-		tween.parallel().tween_property(tile, "modulate:a", 0.0, _anim(0.14))
-	await tween.finished
-
-	for cell in matches:
-		var tile: Control = board_tiles[cell.y][cell.x]
-		if tile != null:
-			tile.queue_free()
-		board_tiles[cell.y][cell.x] = null
-		_set_board_value(cell, 0)
-
-func _collapse_board_with_animation() -> void:
-	var moved: Array = []
-
-	for x in range(BOARD_WIDTH):
-		var values_in_column: Array = []
-		var tiles_in_column: Array = []
-		for y in range(BOARD_HEIGHT - 1, -1, -1):
-			var tile: Control = board_tiles[y][x]
-			if tile != null:
-				values_in_column.append(int(board_values[y][x]))
-				tiles_in_column.append(tile)
-
-		for y in range(BOARD_HEIGHT):
-			board_tiles[y][x] = null
-			board_values[y][x] = 0
-
-		var write_y := BOARD_HEIGHT - 1
-		for i in range(values_in_column.size()):
-			var tile: Control = tiles_in_column[i]
-			board_tiles[write_y][x] = tile
-			board_values[write_y][x] = int(values_in_column[i])
-			moved.append({"tile": tile, "cell": Vector2i(x, write_y)})
-			write_y -= 1
-
-	var tween := create_tween()
-	for item in moved:
-		tween.parallel().tween_property(item["tile"], "position", _get_cell_position(item["cell"]), _anim(0.18)).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	await tween.finished
-
-func _fill_empty_cells_with_animation() -> void:
-	var palette: Array = current_level_data.get("palette", [1, 2, 3])
-	var spawned: Array = []
-
-	for x in range(BOARD_WIDTH):
-		var empty_count := 0
-		for y in range(BOARD_HEIGHT):
-			if board_tiles[y][x] == null:
-				empty_count += 1
-
-		var spawn_index := 0
-		for y in range(BOARD_HEIGHT):
-			if board_tiles[y][x] != null:
-				continue
-			var value := int(palette[randi() % palette.size()])
-			var tile := _create_tile_node(value)
-			var start_y := -empty_count + spawn_index
-			tile.position = _get_cell_position(Vector2i(x, start_y))
-			tile.modulate.a = 1.0
-			tile.scale = Vector2.ONE
-			board_surface.add_child(tile)
-			board_tiles[y][x] = tile
-			board_values[y][x] = value
-			spawned.append({"tile": tile, "cell": Vector2i(x, y)})
-			spawn_index += 1
-
-	var tween := create_tween()
-	for item in spawned:
-		tween.parallel().tween_property(item["tile"], "position", _get_cell_position(item["cell"]), _anim(0.22)).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	await tween.finished
-
-func _collect_progress_from_matches(matches: Array) -> int:
-	var rule: String = current_level_data.get("rule", "counting")
-	if rule == "addition":
-		var total := 0
-		for cell in matches:
-			total += _get_board_value(cell)
-		return total
-
-	var target_value := int(current_level_data.get("target_value", 1))
-	var collected := 0
-	for cell in matches:
-		if _get_board_value(cell) == target_value:
-			collected += 1
-	return collected
-
-func _find_all_matches() -> Array:
-	var matched := {}
-
-	for y in range(BOARD_HEIGHT):
-		var run_value := -1
-		var run_start := 0
-		var run_length := 0
-		for x in range(BOARD_WIDTH):
-			var value := int(board_values[y][x])
-			if value != 0 and value == run_value:
-				run_length += 1
-			else:
-				_mark_run_if_match(matched, true, y, run_start, run_length, run_value)
-				run_value = value
-				run_start = x
-				run_length = 1
-		_mark_run_if_match(matched, true, y, run_start, run_length, run_value)
-
-	for x in range(BOARD_WIDTH):
-		var run_value := -1
-		var run_start := 0
-		var run_length := 0
-		for y in range(BOARD_HEIGHT):
-			var value := int(board_values[y][x])
-			if value != 0 and value == run_value:
-				run_length += 1
-			else:
-				_mark_run_if_match(matched, false, x, run_start, run_length, run_value)
-				run_value = value
-				run_start = y
-				run_length = 1
-		_mark_run_if_match(matched, false, x, run_start, run_length, run_value)
-
-	var results: Array = []
-	for key in matched.keys():
-		results.append(_string_to_cell(key))
-	return results
-
-func _mark_run_if_match(matched: Dictionary, horizontal: bool, fixed: int, start: int, length: int, value: int) -> void:
-	if value == 0 or length < 3:
-		return
-
-	for offset in range(length):
-		var cell := Vector2i(start + offset, fixed) if horizontal else Vector2i(fixed, start + offset)
-		matched[_cell_to_string(cell)] = true
-
-func _refresh_puzzle_header() -> void:
-	var title: String = current_level_data.get("title", "")
-	var goal_amount := int(current_level_data.get("goal_amount", 0))
-	var move_limit := int(current_level_data.get("move_limit", 0))
-	var hint: String = current_level_data.get("hint", "")
-
-	puzzle_title_label.text = "%s - Match 3" % title
-	puzzle_goal_label.text = _get_goal_label()
-	puzzle_hint_label.text = "Hint: %s" % hint
-	puzzle_stats_label.text = "Progress %d/%d   Moves %d/%d" % [goal_progress, goal_amount, moves_used, move_limit]
-	clear_button.disabled = false
-	clear_button.text = "Back to map" if puzzle_finished else "Restart level"
-
-func _refresh_board_visuals() -> void:
-	var matches := _find_all_matches()
-	for y in range(BOARD_HEIGHT):
-		for x in range(BOARD_WIDTH):
-			var tile: Control = board_tiles[y][x]
-			if tile == null:
-				continue
-			var cell := Vector2i(x, y)
-			var value := int(board_values[y][x])
-			var style_color := _get_tile_color(value)
-			if cell == selected_cell:
-				style_color = TILE_SELECTED
-			elif _contains_cell(matches, cell):
-				style_color = TILE_MATCHED
-			_set_tile_value(tile, value)
-			_set_tile_style(tile, style_color)
-
-func _set_tile_style(tile: Control, color: Color) -> void:
-	tile.add_theme_stylebox_override("panel", _make_tile_style(color))
-
-func _check_for_completion() -> void:
-	var goal_amount := int(current_level_data.get("goal_amount", 0))
-	if goal_progress >= goal_amount:
-		puzzle_finished = true
-		var stars := _calculate_stars()
-		PuzzleProgress.complete_level(current_level_id, stars)
-		puzzle_result_label.text = "Stage clear. You earned %d star(s)." % stars
-		_refresh_puzzle_header()
-		_go_to_next_level_after_clear()
-		return
-	_check_for_failure()
-
-func _check_for_failure() -> void:
-	var move_limit := int(current_level_data.get("move_limit", 0))
-	if puzzle_finished:
-		return
-	if moves_used < move_limit:
-		return
-	puzzle_result_label.text = "Out of moves. Restart the level or return to the map."
-	_refresh_puzzle_header()
-
-func _calculate_stars() -> int:
-	var move_limit := int(current_level_data.get("move_limit", 0))
-	var remaining := move_limit - moves_used
-	if remaining >= 5:
-		return 3
-	if remaining >= 2:
-		return 2
-	return 1
+func _on_board_out_of_moves() -> void:
+	clear_button.text = "Restart level"
 
 func _on_clear_button_pressed() -> void:
-	if puzzle_finished:
+	if clear_timer != null:
+		clear_timer = null
+	var level := PuzzleProgress.get_level(current_level_id)
+	if level.is_empty():
+		_return_to_map()
+		return
+	if PuzzleProgress.get_stars_for_level(current_level_id) > 0 and puzzle_result_label.text.begins_with("Stage clear"):
 		_return_to_map()
 	else:
 		_open_level(current_level_id)
+
+func _go_to_next_level_after_clear() -> void:
+	var levels := PuzzleProgress.get_levels_for_chapter(current_chapter_id)
+	for i in range(levels.size()):
+		if levels[i]["id"] != current_level_id:
+			continue
+		clear_timer = get_tree().create_timer(0.45)
+		if i + 1 < levels.size():
+			clear_timer.timeout.connect(_open_level.bind(levels[i + 1]["id"]), CONNECT_ONE_SHOT)
+		else:
+			clear_timer.timeout.connect(_return_to_map, CONNECT_ONE_SHOT)
+		return
 
 func _return_to_map() -> void:
 	_show_map()
@@ -569,10 +193,11 @@ func _restore_task(task_id: String) -> void:
 			break
 	if task.is_empty():
 		return
+
 	if PuzzleProgress.complete_restoration(task_id):
 		DialogueManager.show_text("%s\n\n%s" % [task["title"], task["description"]])
 	else:
-		DialogueManager.show_text("You need more stars. Clear more puzzle stages first.")
+		DialogueManager.show_text("You need more stars. Clear more stages first.")
 
 func _build_level_button_text(level: Dictionary) -> String:
 	var level_id: String = level["id"]
@@ -580,9 +205,9 @@ func _build_level_button_text(level: Dictionary) -> String:
 	var star_text := "Not cleared"
 	if best_stars > 0:
 		star_text = "Best %d star(s)" % best_stars
-	if level.get("rule", "counting") == "addition":
-		return "%s\nReach total %d\n%s" % [level["title"], int(level["goal_amount"]), star_text]
-	return "%s\nCollect %d of %d\n%s" % [level["title"], int(level["goal_amount"]), int(level["target_value"]), star_text]
+	if level.get("rule_type", "counting_collect") == "addition_total":
+		return "%s\nReach total %d\n%s" % [level["title"], int(level["goal_target_amount"]), star_text]
+	return "%s\nCollect %d of %d\n%s" % [level["title"], int(level["goal_target_amount"]), int(level["goal_target_value"]), star_text]
 
 func _build_restoration_button_text(task: Dictionary, completed: bool) -> String:
 	if completed:
@@ -596,107 +221,11 @@ func _is_level_unlocked(index: int) -> bool:
 	var previous_level_id: String = levels[index - 1]["id"]
 	return PuzzleProgress.get_stars_for_level(previous_level_id) > 0
 
-func _format_group_text(value: int) -> String:
-	var icons: Array[String] = []
-	for _i in range(value):
-		icons.append("o")
-	return "%s\n\n%d" % [" ".join(icons), value]
-
-func _get_tile_color(value: int) -> Color:
-	return VALUE_COLORS.get(value, TILE_BASE)
-
-func _make_tile_style(color: Color) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = color
-	style.border_width_left = 2
-	style.border_width_top = 2
-	style.border_width_right = 2
-	style.border_width_bottom = 2
-	style.border_color = Color("8e7d6b")
-	style.corner_radius_top_left = 16
-	style.corner_radius_top_right = 16
-	style.corner_radius_bottom_right = 16
-	style.corner_radius_bottom_left = 16
-	style.content_margin_left = 10
-	style.content_margin_top = 10
-	style.content_margin_right = 10
-	style.content_margin_bottom = 10
-	return style
-
-func _roll_value_without_starting_match(x: int, y: int) -> int:
-	var palette: Array = current_level_data.get("palette", [1, 2, 3])
-	if palette.is_empty():
-		palette = [1, 2, 3]
-	var candidate := int(palette[randi() % palette.size()])
-	var guard := 0
-	while guard < 12 and _would_create_match_at(x, y, candidate):
-		candidate = int(palette[randi() % palette.size()])
-		guard += 1
-	return candidate
-
-func _would_create_match_at(x: int, y: int, value: int) -> bool:
-	if x >= 2 and int(board_values[y][x - 1]) == value and int(board_values[y][x - 2]) == value:
-		return true
-	if y >= 2 and int(board_values[y - 1][x]) == value and int(board_values[y - 2][x]) == value:
-		return true
-	return false
-
-func _is_adjacent(cell_a: Vector2i, cell_b: Vector2i) -> bool:
-	return abs(cell_a.x - cell_b.x) + abs(cell_a.y - cell_b.y) == 1
-
-func _get_board_value(cell: Vector2i) -> int:
-	return int(board_values[cell.y][cell.x])
-
-func _set_board_value(cell: Vector2i, value: int) -> void:
-	board_values[cell.y][cell.x] = value
-
-func _get_cell_position(cell: Vector2i) -> Vector2:
-	return Vector2(
-		BOARD_PADDING.x + cell.x * (TILE_SIZE.x + TILE_GAP.x),
-		BOARD_PADDING.y + cell.y * (TILE_SIZE.y + TILE_GAP.y)
-	)
-
-func _animate_tiles_parallel(items: Array, duration: float) -> void:
-	var tween := create_tween()
-	for item in items:
-		tween.parallel().tween_property(item["tile"], "position", _get_cell_position(item["cell"]), duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	await tween.finished
-
-func _go_to_next_level_after_clear() -> void:
-	var levels := PuzzleProgress.get_levels_for_chapter(current_chapter_id)
-	for i in range(levels.size()):
-		if levels[i]["id"] != current_level_id:
-			continue
-		var timer := get_tree().create_timer(_anim(0.6))
-		if i + 1 < levels.size():
-			timer.timeout.connect(_open_level.bind(levels[i + 1]["id"]), CONNECT_ONE_SHOT)
-		else:
-			timer.timeout.connect(_return_to_map, CONNECT_ONE_SHOT)
+func _switch_chapter(chapter_id: String) -> void:
+	if not PuzzleProgress.is_chapter_unlocked(chapter_id):
 		return
-
-func _get_cell_at_global_position(mouse_global_position: Vector2) -> Vector2i:
-	for y in range(BOARD_HEIGHT):
-		for x in range(BOARD_WIDTH):
-			var tile: Control = board_tiles[y][x]
-			if tile == null:
-				continue
-			var rect := Rect2(tile.global_position, TILE_SIZE)
-			if rect.has_point(mouse_global_position):
-				return Vector2i(x, y)
-	return Vector2i(-1, -1)
-
-func _cell_to_string(cell: Vector2i) -> String:
-	return "%d,%d" % [cell.x, cell.y]
-
-func _string_to_cell(key: String) -> Vector2i:
-	var parts := key.split(",")
-	return Vector2i(int(parts[0]), int(parts[1]))
-
-func _contains_cell(cells: Array, target: Vector2i) -> bool:
-	for cell in cells:
-		if cell == target:
-			return true
-	return false
+	current_chapter_id = chapter_id
+	_refresh_map_screen()
 
 func _show_map() -> void:
 	map_screen.show()
@@ -707,40 +236,8 @@ func _show_puzzle() -> void:
 	puzzle_screen.show()
 
 func _show_intro_messages() -> void:
-	DialogueManager.show_text("Welcome to Counting Village.\n\nThe meta loop stays the same, but the puzzle core is now a match-3 board.")
+	DialogueManager.show_text("Welcome to Math Civilization Puzzle.\n\nGrade 1 starts with counting, then grows into visible addition.")
 
 func _on_chapter_unlocked(chapter_id: String) -> void:
 	if chapter_id == "addition":
-		DialogueManager.show_text("New chapter unlocked.\n\nAddition Bridge is ready for the next puzzle set.")
-
-func _wait(seconds: float) -> void:
-	await get_tree().create_timer(seconds).timeout
-
-func _anim(seconds: float) -> float:
-	return seconds * ANIM_SPEED_SCALE
-
-func _switch_chapter(chapter_id: String) -> void:
-	if not PuzzleProgress.is_chapter_unlocked(chapter_id):
-		return
-	current_chapter_id = chapter_id
-	_refresh_map_screen()
-
-func _get_chapter_note(chapter_id: String) -> String:
-	if chapter_id == "addition":
-		return "This chapter turns every match into a visible sum. Build totals to restore the bridge."
-	return "This chapter uses a match-3 board. Match counted groups to restore the village."
-
-func _get_level_status_text(chapter_id: String) -> String:
-	if chapter_id == "addition":
-		return "Swap adjacent tiles to make matches of 3 or more. Every matched number adds to your running total."
-	return "Swap adjacent tiles to make matches of 3 or more. Matching the target number fills the level goal."
-
-func _get_goal_label() -> String:
-	if current_level_data.get("rule", "counting") == "addition":
-		return "Goal: add matched groups until you reach a total of %d." % int(current_level_data.get("goal_amount", 0))
-	return "Goal: collect %d tile(s) showing value %d." % [int(current_level_data.get("goal_amount", 0)), int(current_level_data.get("target_value", 1))]
-
-func _get_progress_message(progress_gained: int) -> String:
-	if current_level_data.get("rule", "counting") == "addition":
-		return "Added %d to the bridge total." % progress_gained
-	return "Collected %d target tile(s)." % progress_gained
+		DialogueManager.show_text("New unit unlocked.\n\nAddition Bridge is now available.")

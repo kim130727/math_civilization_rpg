@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="MathLevelData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/puzzle/MathLevelData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+level_id = "add_01"
+title = "1. Build the Bridge"
+grade_id = "grade1"
+chapter_id = "addition"
+unit_id = "g1_addition_intro"
+rule_type = "addition_total"
+board_width = 6
+board_height = 6
+palette = Array[int]([1, 2, 3])
+goal_target_amount = 18
+move_limit = 10
+hint = "Every matched tile adds its value to the bridge total."
+star_thresholds = Array[int]([4, 2])

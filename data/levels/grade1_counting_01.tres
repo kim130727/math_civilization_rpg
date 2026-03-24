@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MathLevelData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/puzzle/MathLevelData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+level_id = "count_01"
+title = "Level 1"
+grade_id = "grade1"
+chapter_id = "counting"
+unit_id = "g1_counting"
+rule_type = "counting_collect"
+board_width = 6
+board_height = 6
+palette = Array[int]([1, 2, 3])
+goal_target_value = 1
+goal_target_amount = 12
+move_limit = 12
+hint = "Match the tiles that show one object."
+star_thresholds = Array[int]([5, 2])

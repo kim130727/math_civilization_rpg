@@ -1,0 +1,35 @@
+{
+  "chapter_progression_template": [
+    {"slot": 1, "role": "introduction", "goal": "Teach one core interaction with strong feedback.", "board_pressure": "low"},
+    {"slot": 2, "role": "guided_discovery", "goal": "Repeat with one small variation.", "board_pressure": "low"},
+    {"slot": 3, "role": "practice", "goal": "Build fluency with the same mechanic.", "board_pressure": "medium"},
+    {"slot": 4, "role": "variation", "goal": "Change palette or target pattern.", "board_pressure": "medium"},
+    {"slot": 5, "role": "challenge", "goal": "Require planning inside tighter move limits.", "board_pressure": "medium"},
+    {"slot": 6, "role": "reward", "goal": "Offer a lighter restoration-feeling stage.", "board_pressure": "low"},
+    {"slot": 7, "role": "new_twist", "goal": "Add one compatible rule modifier.", "board_pressure": "medium"},
+    {"slot": 8, "role": "applied_practice", "goal": "Use the chapter idea in a mixed board.", "board_pressure": "medium"},
+    {"slot": 9, "role": "mixed_challenge", "goal": "Combine two learned patterns.", "board_pressure": "high"},
+    {"slot": 10, "role": "boss", "goal": "Demonstrate concept mastery with a signature stage.", "board_pressure": "high"}
+  ],
+  "level_schema": {
+    "level_id": "string",
+    "grade_id": "string",
+    "chapter_id": "string",
+    "unit_id": "string",
+    "board_width": "int",
+    "board_height": "int",
+    "tile_palette": ["int"],
+    "mechanic_focus": "string",
+    "rule_type": "string",
+    "objective_type": "string",
+    "goal_target_value": "int",
+    "goal_target_amount": "int",
+    "move_limit": "int",
+    "star_thresholds": ["int"],
+    "blockers": ["string"],
+    "hint_text": "string",
+    "tutorial_beats": ["string"],
+    "restoration_reward": "string",
+    "difficulty_role": "string"
+  }
+}

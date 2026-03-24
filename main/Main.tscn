@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c8y5xklsn7c4d"]
+[gd_scene load_steps=4 format=3 uid="uid://c8y5xklsn7c4d"]
 
 [ext_resource type="Script" path="res://main/Main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/ui/DialogueBox.tscn" id="2_dialogue"]
+[ext_resource type="Script" path="res://scripts/Match3BoardController.gd" id="3_board"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -240,6 +241,7 @@ theme_override_constants/margin_bottom = 18
 [node name="PuzzleGrid" type="Control" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzlePanel/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+script = ExtResource("3_board")
 
 [node name="PuzzleFooter" type="VBoxContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer"]
 layout_mode = 2
