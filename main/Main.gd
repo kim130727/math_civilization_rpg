@@ -51,6 +51,7 @@ var goal_progress := 0
 var puzzle_finished := false
 var last_result_was_invalid := false
 var debug_click_count := 0
+var is_animating := false
 
 func _ready() -> void:
 	randomize()
@@ -143,6 +144,7 @@ func _open_level(level_id: String) -> void:
 	puzzle_finished = false
 	last_result_was_invalid = false
 	debug_click_count = 0
+	is_animating = false
 
 	_build_match3_board()
 	_refresh_puzzle_header()
@@ -192,6 +194,9 @@ func _build_match3_board() -> void:
 		return
 
 func _on_tile_pressed(cell: Vector2i) -> void:
+	if is_animating:
+		return
+
 	debug_click_count += 1
 
 	if puzzle_finished:
@@ -216,7 +221,7 @@ func _on_tile_pressed(cell: Vector2i) -> void:
 		_refresh_board_visuals()
 		return
 
-	var should_clear_selection := _try_swap(selected_cell, cell)
+	var should_clear_selection := await _try_swap(selected_cell, cell)
 	if should_clear_selection:
 		selected_cell = Vector2i(-1, -1)
 	_refresh_board_visuals()
@@ -232,6 +237,8 @@ func _input(event: InputEvent) -> void:
 	var mouse_event := event as InputEventMouseButton
 	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
 		return
+	if is_animating:
+		return
 
 	var cell := _get_cell_at_global_position(mouse_event.position)
 	if cell == Vector2i(-1, -1):
@@ -240,7 +247,10 @@ func _input(event: InputEvent) -> void:
 	_on_tile_pressed(cell)
 
 func _try_swap(cell_a: Vector2i, cell_b: Vector2i) -> bool:
+	is_animating = true
 	_swap_cells(cell_a, cell_b)
+	_refresh_board_visuals()
+	await _wait(0.16)
 	var matches := _find_all_matches()
 	moves_used += 1
 
@@ -251,14 +261,17 @@ func _try_swap(cell_a: Vector2i, cell_b: Vector2i) -> bool:
 		puzzle_result_label.text = "Click %d: no match, swap canceled. Selected (%d, %d)." % [debug_click_count, cell_b.x, cell_b.y]
 		_refresh_puzzle_header()
 		_flash_invalid_swap(cell_a, cell_b)
+		await _wait(0.14)
 		_refresh_board_visuals()
 		_check_for_failure()
+		is_animating = false
 		return false
 
 	last_result_was_invalid = false
-	_resolve_matches(matches)
+	await _resolve_matches(matches)
 	_refresh_puzzle_header()
 	_check_for_completion()
+	is_animating = false
 	return true
 
 func _resolve_matches(initial_matches: Array) -> void:
@@ -268,10 +281,17 @@ func _resolve_matches(initial_matches: Array) -> void:
 
 	while not cascade_matches.is_empty():
 		cascade_count += 1
+		await _show_match_step(cascade_matches)
 		total_target_collected += _collect_goal_tiles(cascade_matches)
 		_clear_matches(cascade_matches)
+		_refresh_board_visuals()
+		await _wait(0.12)
 		_collapse_board()
+		_refresh_board_visuals()
+		await _wait(0.14)
 		_fill_empty_cells()
+		_refresh_board_visuals()
+		await _wait(0.16)
 		cascade_matches = _find_all_matches()
 
 	goal_progress += total_target_collected
@@ -279,6 +299,13 @@ func _resolve_matches(initial_matches: Array) -> void:
 	puzzle_result_label.text = "Matched %d group tile(s) for value %d." % [total_target_collected, target_value]
 	if cascade_count > 1:
 		puzzle_result_label.text += " Cascade x%d." % cascade_count
+
+func _show_match_step(matches: Array) -> void:
+	selected_cell = Vector2i(-1, -1)
+	for cell in matches:
+		var tile := tile_controls[_cell_to_index(cell)]
+		tile.add_theme_stylebox_override("panel", _make_tile_style(TILE_MATCHED))
+	await _wait(0.18)
 
 func _collect_goal_tiles(matches: Array) -> int:
 	var goal_value := int(current_level_data.get("goal_value", 1))
@@ -620,3 +647,6 @@ func _show_intro_messages() -> void:
 func _on_chapter_unlocked(chapter_id: String) -> void:
 	if chapter_id == "addition":
 		DialogueManager.show_text("New chapter unlocked.\n\nAddition Bridge is ready for the next puzzle set.")
+
+func _wait(seconds: float) -> void:
+	await get_tree().create_timer(seconds).timeout
