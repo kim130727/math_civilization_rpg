@@ -66,6 +66,10 @@ autowrap_mode = 3
 theme_override_font_sizes/font_size = 18
 text = "Chapter note"
 
+[node name="ChapterTabs" type="HBoxContainer" parent="MapScreen/MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
 [node name="BodyHBox" type="HBoxContainer" parent="MapScreen/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3

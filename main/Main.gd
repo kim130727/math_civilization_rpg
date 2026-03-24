@@ -26,6 +26,7 @@ const VALUE_COLORS := {
 @onready var chapter_label: Label = $MapScreen/MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox/ChapterLabel
 @onready var progress_label: Label = $MapScreen/MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox/ProgressLabel
 @onready var chapter_note_label: Label = $MapScreen/MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox/ChapterNoteLabel
+@onready var chapter_tabs: HBoxContainer = $MapScreen/MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox/ChapterTabs
 @onready var level_grid: GridContainer = $MapScreen/MarginContainer/VBoxContainer/BodyHBox/LevelsPanel/MarginContainer/LevelsVBox/LevelGrid
 @onready var level_status_label: Label = $MapScreen/MarginContainer/VBoxContainer/BodyHBox/LevelsPanel/MarginContainer/LevelsVBox/LevelStatusLabel
 @onready var restoration_preview_label: Label = $MapScreen/MarginContainer/VBoxContainer/BodyHBox/RestorePanel/MarginContainer/RestoreVBox/PreviewLabel
@@ -76,8 +77,9 @@ func _refresh_map_screen() -> void:
 
 	chapter_label.text = "Chapter 1. %s" % chapter.get("title", "Counting Village")
 	progress_label.text = "Levels %d/%d   Stars %d   Spendable %d   Restore %d%%" % [completed_levels, total_levels, total_stars, available_stars, restoration_percent]
-	chapter_note_label.text = "This chapter uses a match-3 board. Match counted groups to restore the village."
+	chapter_note_label.text = _get_chapter_note(current_chapter_id)
 
+	_rebuild_chapter_tabs()
 	_rebuild_level_buttons()
 	_rebuild_restoration_tasks()
 	_refresh_restoration_preview()
@@ -102,7 +104,20 @@ func _rebuild_level_buttons() -> void:
 		button.pressed.connect(_open_level.bind(level["id"]))
 		level_grid.add_child(button)
 
-	level_status_label.text = "Swap adjacent tiles to make matches of 3 or more. Matching the target number fills the level goal."
+	level_status_label.text = _get_level_status_text(current_chapter_id)
+
+func _rebuild_chapter_tabs() -> void:
+	for child in chapter_tabs.get_children():
+		child.queue_free()
+
+	for chapter in PuzzleProgress.CHAPTERS:
+		var chapter_id: String = chapter["id"]
+		var button := Button.new()
+		button.text = chapter["title"]
+		button.custom_minimum_size = Vector2(180, 42)
+		button.disabled = not PuzzleProgress.is_chapter_unlocked(chapter_id) or chapter_id == current_chapter_id
+		button.pressed.connect(_switch_chapter.bind(chapter_id))
+		chapter_tabs.add_child(button)
 
 func _rebuild_restoration_tasks() -> void:
 	for child in restoration_task_list.get_children():
@@ -312,20 +327,19 @@ func _try_swap(cell_a: Vector2i, cell_b: Vector2i) -> bool:
 
 func _resolve_matches(initial_matches: Array) -> void:
 	var cascade_matches: Array = initial_matches
-	var total_target_collected := 0
+	var total_progress_gained := 0
 	var cascade_count := 0
 
 	while not cascade_matches.is_empty():
 		cascade_count += 1
-		total_target_collected += _collect_goal_tiles(cascade_matches)
+		total_progress_gained += _collect_progress_from_matches(cascade_matches)
 		await _animate_match_clear(cascade_matches)
 		await _collapse_board_with_animation()
 		await _fill_empty_cells_with_animation()
 		cascade_matches = _find_all_matches()
 
-	goal_progress += total_target_collected
-	var target_value := int(current_level_data.get("goal_value", 1))
-	puzzle_result_label.text = "Matched %d group tile(s) for value %d." % [total_target_collected, target_value]
+	goal_progress += total_progress_gained
+	puzzle_result_label.text = _get_progress_message(total_progress_gained)
 	if cascade_count > 1:
 		puzzle_result_label.text += " Cascade x%d." % cascade_count
 
@@ -413,11 +427,18 @@ func _fill_empty_cells_with_animation() -> void:
 		tween.parallel().tween_property(item["tile"], "position", _get_cell_position(item["cell"]), _anim(0.22)).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	await tween.finished
 
-func _collect_goal_tiles(matches: Array) -> int:
-	var goal_value := int(current_level_data.get("goal_value", 1))
+func _collect_progress_from_matches(matches: Array) -> int:
+	var rule: String = current_level_data.get("rule", "counting")
+	if rule == "addition":
+		var total := 0
+		for cell in matches:
+			total += _get_board_value(cell)
+		return total
+
+	var target_value := int(current_level_data.get("target_value", 1))
 	var collected := 0
 	for cell in matches:
-		if _get_board_value(cell) == goal_value:
+		if _get_board_value(cell) == target_value:
 			collected += 1
 	return collected
 
@@ -469,15 +490,14 @@ func _mark_run_if_match(matched: Dictionary, horizontal: bool, fixed: int, start
 
 func _refresh_puzzle_header() -> void:
 	var title: String = current_level_data.get("title", "")
-	var goal_value := int(current_level_data.get("goal_value", 1))
-	var goal_count := int(current_level_data.get("goal_count", 0))
+	var goal_amount := int(current_level_data.get("goal_amount", 0))
 	var move_limit := int(current_level_data.get("move_limit", 0))
 	var hint: String = current_level_data.get("hint", "")
 
 	puzzle_title_label.text = "%s - Match 3" % title
-	puzzle_goal_label.text = "Goal: collect %d tile(s) showing value %d." % [goal_count, goal_value]
+	puzzle_goal_label.text = _get_goal_label()
 	puzzle_hint_label.text = "Hint: %s" % hint
-	puzzle_stats_label.text = "Collected %d/%d   Moves %d/%d" % [goal_progress, goal_count, moves_used, move_limit]
+	puzzle_stats_label.text = "Progress %d/%d   Moves %d/%d" % [goal_progress, goal_amount, moves_used, move_limit]
 	clear_button.disabled = false
 	clear_button.text = "Back to map" if puzzle_finished else "Restart level"
 
@@ -502,8 +522,8 @@ func _set_tile_style(tile: Control, color: Color) -> void:
 	tile.add_theme_stylebox_override("panel", _make_tile_style(color))
 
 func _check_for_completion() -> void:
-	var goal_count := int(current_level_data.get("goal_count", 0))
-	if goal_progress >= goal_count:
+	var goal_amount := int(current_level_data.get("goal_amount", 0))
+	if goal_progress >= goal_amount:
 		puzzle_finished = true
 		var stars := _calculate_stars()
 		PuzzleProgress.complete_level(current_level_id, stars)
@@ -560,7 +580,9 @@ func _build_level_button_text(level: Dictionary) -> String:
 	var star_text := "Not cleared"
 	if best_stars > 0:
 		star_text = "Best %d star(s)" % best_stars
-	return "%s\nCollect %d of %d\n%s" % [level["title"], int(level["goal_count"]), int(level["goal_value"]), star_text]
+	if level.get("rule", "counting") == "addition":
+		return "%s\nReach total %d\n%s" % [level["title"], int(level["goal_amount"]), star_text]
+	return "%s\nCollect %d of %d\n%s" % [level["title"], int(level["goal_amount"]), int(level["target_value"]), star_text]
 
 func _build_restoration_button_text(task: Dictionary, completed: bool) -> String:
 	if completed:
@@ -696,3 +718,29 @@ func _wait(seconds: float) -> void:
 
 func _anim(seconds: float) -> float:
 	return seconds * ANIM_SPEED_SCALE
+
+func _switch_chapter(chapter_id: String) -> void:
+	if not PuzzleProgress.is_chapter_unlocked(chapter_id):
+		return
+	current_chapter_id = chapter_id
+	_refresh_map_screen()
+
+func _get_chapter_note(chapter_id: String) -> String:
+	if chapter_id == "addition":
+		return "This chapter turns every match into a visible sum. Build totals to restore the bridge."
+	return "This chapter uses a match-3 board. Match counted groups to restore the village."
+
+func _get_level_status_text(chapter_id: String) -> String:
+	if chapter_id == "addition":
+		return "Swap adjacent tiles to make matches of 3 or more. Every matched number adds to your running total."
+	return "Swap adjacent tiles to make matches of 3 or more. Matching the target number fills the level goal."
+
+func _get_goal_label() -> String:
+	if current_level_data.get("rule", "counting") == "addition":
+		return "Goal: add matched groups until you reach a total of %d." % int(current_level_data.get("goal_amount", 0))
+	return "Goal: collect %d tile(s) showing value %d." % [int(current_level_data.get("goal_amount", 0)), int(current_level_data.get("target_value", 1))]
+
+func _get_progress_message(progress_gained: int) -> String:
+	if current_level_data.get("rule", "counting") == "addition":
+		return "Added %d to the bridge total." % progress_gained
+	return "Collected %d target tile(s)." % progress_gained

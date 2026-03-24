@@ -10,33 +10,39 @@ const CHAPTERS := [
 		"id": "counting",
 		"title": "Counting Village",
 		"concept_name": "number_1",
-		"description": "Match tiles that show groups of counted objects.",
+		"description": "Count visible groups and collect specific number tiles.",
 	},
 	{
 		"id": "addition",
 		"title": "Addition Bridge",
 		"concept_name": "addition",
-		"description": "Combine groups to make the required total.",
+		"description": "Add together matched groups to build a target total.",
 	},
 ]
 
 const COUNTING_LEVELS := [
-	{"id": "count_01", "title": "Level 1", "chapter_id": "counting", "goal_value": 1, "goal_count": 12, "move_limit": 12, "palette": [1, 2, 3], "hint": "Match the tiles that show one object."},
-	{"id": "count_02", "title": "Level 2", "chapter_id": "counting", "goal_value": 2, "goal_count": 12, "move_limit": 12, "palette": [1, 2, 3], "hint": "Collect tiles that show two objects."},
-	{"id": "count_03", "title": "Level 3", "chapter_id": "counting", "goal_value": 3, "goal_count": 12, "move_limit": 13, "palette": [1, 2, 3, 4], "hint": "Three-object groups are the target now."},
-	{"id": "count_04", "title": "Level 4", "chapter_id": "counting", "goal_value": 4, "goal_count": 12, "move_limit": 13, "palette": [2, 3, 4, 5], "hint": "Look for tiles that show four objects."},
-	{"id": "count_05", "title": "Level 5", "chapter_id": "counting", "goal_value": 5, "goal_count": 12, "move_limit": 14, "palette": [2, 3, 4, 5], "hint": "Five-object groups are larger, so scan carefully."},
-	{"id": "count_06", "title": "Level 6", "chapter_id": "counting", "goal_value": 2, "goal_count": 15, "move_limit": 14, "palette": [1, 2, 3, 4, 5], "hint": "Collect more 2s before the move limit runs out."},
-	{"id": "count_07", "title": "Level 7", "chapter_id": "counting", "goal_value": 3, "goal_count": 15, "move_limit": 14, "palette": [1, 2, 3, 4, 5], "hint": "Set up chain reactions with 3s."},
-	{"id": "count_08", "title": "Level 8", "chapter_id": "counting", "goal_value": 4, "goal_count": 15, "move_limit": 15, "palette": [2, 3, 4, 5, 6], "hint": "Four-object groups now share the board with larger sets."},
-	{"id": "count_09", "title": "Level 9", "chapter_id": "counting", "goal_value": 5, "goal_count": 15, "move_limit": 15, "palette": [2, 3, 4, 5, 6], "hint": "Build matches that feed more 5s onto the board."},
-	{"id": "count_10", "title": "Level 10", "chapter_id": "counting", "goal_value": 6, "goal_count": 18, "move_limit": 16, "palette": [3, 4, 5, 6], "hint": "Final village test: count the biggest groups with confidence."},
+	{"id": "count_01", "title": "Level 1", "chapter_id": "counting", "rule": "counting", "target_value": 1, "goal_amount": 12, "move_limit": 12, "palette": [1, 2, 3], "hint": "Match the tiles that show one object."},
+	{"id": "count_02", "title": "Level 2", "chapter_id": "counting", "rule": "counting", "target_value": 2, "goal_amount": 12, "move_limit": 12, "palette": [1, 2, 3], "hint": "Collect tiles that show two objects."},
+	{"id": "count_03", "title": "Level 3", "chapter_id": "counting", "rule": "counting", "target_value": 3, "goal_amount": 12, "move_limit": 13, "palette": [1, 2, 3, 4], "hint": "Three-object groups are the target now."},
+	{"id": "count_04", "title": "Level 4", "chapter_id": "counting", "rule": "counting", "target_value": 4, "goal_amount": 12, "move_limit": 13, "palette": [2, 3, 4, 5], "hint": "Look for tiles that show four objects."},
+	{"id": "count_05", "title": "Level 5", "chapter_id": "counting", "rule": "counting", "target_value": 5, "goal_amount": 12, "move_limit": 14, "palette": [2, 3, 4, 5], "hint": "Five-object groups are larger, so scan carefully."},
+]
+
+const ADDITION_LEVELS := [
+	{"id": "add_01", "title": "Level 1", "chapter_id": "addition", "rule": "addition", "goal_amount": 18, "move_limit": 10, "palette": [1, 2, 3], "hint": "Every matched tile adds its value to the bridge total."},
+	{"id": "add_02", "title": "Level 2", "chapter_id": "addition", "rule": "addition", "goal_amount": 24, "move_limit": 10, "palette": [1, 2, 3, 4], "hint": "Look for larger groups to build the total faster."},
+	{"id": "add_03", "title": "Level 3", "chapter_id": "addition", "rule": "addition", "goal_amount": 32, "move_limit": 11, "palette": [1, 2, 3, 4], "hint": "Chain reactions are a good way to add more at once."},
+	{"id": "add_04", "title": "Level 4", "chapter_id": "addition", "rule": "addition", "goal_amount": 40, "move_limit": 11, "palette": [2, 3, 4, 5], "hint": "Higher values matter more now."},
+	{"id": "add_05", "title": "Level 5", "chapter_id": "addition", "rule": "addition", "goal_amount": 48, "move_limit": 12, "palette": [2, 3, 4, 5], "hint": "Final bridge test: build the target total efficiently."},
 ]
 
 const RESTORATION_TASKS := [
 	{"id": "count_square", "chapter_id": "counting", "title": "Restore Number Square", "description": "Organize the village plaza so objects can be counted clearly.", "cost": 3},
 	{"id": "count_lanterns", "chapter_id": "counting", "title": "Hang Lantern Rows", "description": "Bring pattern and rhythm to the main street.", "cost": 6},
 	{"id": "count_market", "chapter_id": "counting", "title": "Open Counting Market", "description": "Every stall now shows neat groups and price tags.", "cost": 9},
+	{"id": "add_pillars", "chapter_id": "addition", "title": "Raise Bridge Pillars", "description": "Add stone supports so the bridge can carry grouped weight.", "cost": 4},
+	{"id": "add_arch", "chapter_id": "addition", "title": "Complete the Main Arch", "description": "Balanced sums hold the bridge together.", "cost": 8},
+	{"id": "add_caravan", "chapter_id": "addition", "title": "Open the Trade Route", "description": "The bridge now supports travelers and supplies.", "cost": 12},
 ]
 
 var stars_by_level: Dictionary = {}
@@ -57,7 +63,7 @@ func get_chapter(chapter_id: String) -> Dictionary:
 
 func get_levels_for_chapter(chapter_id: String) -> Array[Dictionary]:
 	var results: Array[Dictionary] = []
-	for level in COUNTING_LEVELS:
+	for level in _all_levels():
 		if level["chapter_id"] == chapter_id:
 			results.append(level)
 	return results
@@ -70,7 +76,7 @@ func get_restoration_tasks_for_chapter(chapter_id: String) -> Array[Dictionary]:
 	return results
 
 func get_level(level_id: String) -> Dictionary:
-	for level in COUNTING_LEVELS:
+	for level in _all_levels():
 		if level["id"] == level_id:
 			return level
 	return {}
@@ -80,7 +86,7 @@ func get_stars_for_level(level_id: String) -> int:
 
 func get_total_stars(chapter_id: String = "") -> int:
 	var total := 0
-	for level in COUNTING_LEVELS:
+	for level in _all_levels():
 		if chapter_id != "" and level["chapter_id"] != chapter_id:
 			continue
 		total += get_stars_for_level(level["id"])
@@ -178,3 +184,9 @@ func _unlock_chapter_concept(chapter_id: String) -> void:
 	var concept_name: String = chapter.get("concept_name", "")
 	if concept_name != "":
 		AbstractionManager.unlock_concept(concept_name)
+
+func _all_levels() -> Array[Dictionary]:
+	var results: Array[Dictionary] = []
+	results.append_array(COUNTING_LEVELS)
+	results.append_array(ADDITION_LEVELS)
+	return results
