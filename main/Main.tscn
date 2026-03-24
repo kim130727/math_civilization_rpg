@@ -233,12 +233,9 @@ theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 18
 theme_override_constants/margin_bottom = 18
 
-[node name="PuzzleGrid" type="GridContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzlePanel/MarginContainer"]
+[node name="PuzzleGrid" type="Control" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzlePanel/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/h_separation = 12
-theme_override_constants/v_separation = 12
-columns = 2
 
 [node name="PuzzleFooter" type="VBoxContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer"]
 layout_mode = 2
