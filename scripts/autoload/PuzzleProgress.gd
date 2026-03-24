@@ -5,6 +5,8 @@ signal level_completed(level_id: String, earned_stars: int)
 signal restoration_completed(task_id: String)
 signal chapter_unlocked(chapter_id: String)
 
+const SAVE_PATH := "user://puzzle_progress.cfg"
+
 const FALLBACK_CHAPTERS := [
 	{"id": "counting", "title": "Counting Village", "concept_name": "number_1", "grade_id": "grade1", "unit_id": "g1_counting_intro"},
 	{"id": "addition", "title": "Addition Bridge", "concept_name": "addition", "grade_id": "grade1", "unit_id": "g1_addition_intro"},
@@ -68,6 +70,7 @@ var _level_cache: Dictionary = {}
 
 func _ready() -> void:
 	_load_curriculum_manifest()
+	_load_progress()
 	_unlock_chapter_concept("counting")
 
 func get_curriculum_manifest() -> Dictionary:
@@ -198,6 +201,7 @@ func complete_level(level_id: String, earned_stars: int) -> bool:
 	if earned_stars <= previous_stars:
 		return false
 	stars_by_level[level_id] = earned_stars
+	_save_progress()
 	level_completed.emit(level_id, earned_stars)
 	progress_changed.emit()
 	_check_unlocks()
@@ -216,6 +220,7 @@ func complete_restoration(task_id: String) -> bool:
 	if get_available_stars(chapter_id) < int(task.get("cost", 0)):
 		return false
 	completed_restorations[task_id] = true
+	_save_progress()
 	restoration_completed.emit(task_id)
 	progress_changed.emit()
 	_check_unlocks()
@@ -248,6 +253,7 @@ func _check_unlocks() -> void:
 		if _meets_unlock_rule(get_unlock_requirement(chapter_id)):
 			unlocked_chapters[chapter_id] = true
 			_unlock_chapter_concept(chapter_id)
+			_save_progress()
 			chapter_unlocked.emit(chapter_id)
 			progress_changed.emit()
 
@@ -324,3 +330,23 @@ func _load_fallback_data() -> void:
 	_chapter_level_ids = FALLBACK_CHAPTER_LEVEL_IDS.duplicate(true)
 	_level_paths = FALLBACK_LEVELS.duplicate(true)
 	_restoration_tasks = FALLBACK_RESTORATION_TASKS.duplicate(true)
+
+func _save_progress() -> void:
+	var save := ConfigFile.new()
+	save.set_value("progress", "stars_by_level", stars_by_level)
+	save.set_value("progress", "completed_restorations", completed_restorations)
+	save.set_value("progress", "unlocked_chapters", unlocked_chapters)
+	save.save(SAVE_PATH)
+
+func _load_progress() -> void:
+	var save := ConfigFile.new()
+	var result := save.load(SAVE_PATH)
+	if result != OK:
+		return
+	stars_by_level = save.get_value("progress", "stars_by_level", {})
+	completed_restorations = save.get_value("progress", "completed_restorations", {})
+	var saved_unlocks = save.get_value("progress", "unlocked_chapters", {})
+	if saved_unlocks is Dictionary:
+		for chapter_id in saved_unlocks.keys():
+			unlocked_chapters[String(chapter_id)] = bool(saved_unlocks[chapter_id])
+	unlocked_chapters["counting"] = true
