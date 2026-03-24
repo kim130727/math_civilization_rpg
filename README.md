@@ -1,37 +1,55 @@
-# Math Civilization RPG
+# Math Civilization Puzzle
 
-Godot 4 기반의 실험적 RPG 프로토타입입니다. 플레이어는 혼돈 상태의 세계를 탐험하며 `숫자 -> 덧셈 -> 곱셈`의 질서를 해금하고, 그에 따라 UI와 월드가 함께 진화합니다.
+Godot 4 based puzzle game prototype.
 
-## 현재 포함된 MVP
+The project is pivoting from a field-exploration RPG into a mobile-first puzzle game where players naturally learn math abstractions by solving short, satisfying puzzle stages and rebuilding the world.
 
-- 플레이어 이동과 상호작용 (`WASD`, `E`)
-- 대화 UI (`Enter`로 닫기)
-- 추상화 단계 관리
-- 숫자 해금 퍼즐: `1 -> 2 -> 3` 순서의 돌
-- 덧셈 해금 흐름: 돌 5개를 모아 현자에게 전달
-- 곱셈 해금 흐름: 씨앗 6개를 모아 현자에게 전달
-- 덧셈 해금 후 문 열기
-- 곱셈 해금 후 농장 시각화
+## New Direction
 
-## 폴더 구조
+- Core genre: casual puzzle game
+- Reference feel: restore-and-progress structure similar to mobile renovation puzzle games
+- Core fantasy: math is not a school subject, but a tool that repairs, organizes, and expands the world
+- Learning flow: count -> add -> multiply -> fractions -> divide -> advanced abstractions
 
-- `main/`: 메인 씬
-- `scripts/autoload/`: 전역 상태와 매니저
-- `scenes/player/`: 플레이어
-- `scenes/interactables/`: 퍼즐 돌, 자원, 문, 현자 NPC
-- `scenes/world/`: 월드 루트
-- `scenes/ui/`: HUD와 대화창
+## Core Loop
 
-## 실행 방법
+1. Clear a short puzzle stage
+2. Earn stars, resources, or concept fragments
+3. Restore part of the world
+4. Unlock a new math idea through play
+5. Use the new idea in later puzzle mechanics
 
-1. Godot 4.x로 이 폴더를 엽니다.
-2. 메인 씬은 `res://main/Main.tscn`입니다.
-3. 실행 후 `E`로 상호작용하며 진행합니다.
+## Design Goals
 
-## 다음 추천 작업
+- Teach math through repeated play, not long explanations
+- Make every new concept visible in the world
+- Keep stages short and mobile-friendly
+- Reward experimentation and pattern recognition
+- Build a strong sense of progress through restoration and unlocks
 
-- 타일맵과 충돌 지형 추가
-- 저장/불러오기
-- 대화 데이터를 JSON/Resource로 분리
-- 던전 씬과 보스 보호막 퍼즐 추가
-- 사운드와 연출(숫자 등장, 월드 정렬 효과) 강화
+## Current Project State
+
+The existing implementation still contains the earlier RPG-style prototype:
+
+- player movement and interaction
+- world objects and dialogue
+- abstraction unlock manager
+- early gate/resource progression
+
+These systems are now best treated as prototype references while the project transitions to a puzzle-first structure.
+
+## Suggested Next Build Steps
+
+1. Replace movement-centric main scene with a puzzle hub + stage flow
+2. Build a reusable puzzle board scene
+3. Add chapter progression for counting, addition, and multiplication
+4. Add star rewards and restoration tasks
+5. Convert abstraction unlocks into puzzle mechanic unlocks
+
+## Main Scene
+
+- `res://main/Main.tscn`
+
+## Docs
+
+- `res://GAME_DESIGN.md`

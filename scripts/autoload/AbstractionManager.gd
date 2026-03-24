@@ -35,15 +35,21 @@ func has_concept(concept_name: String) -> bool:
 func get_level_name() -> String:
 	match current_level:
 		AbstractionLevel.CHAOS:
-			return "혼돈"
+			return "Chaos"
 		AbstractionLevel.NUMBER:
-			return "수의 탄생"
+			return "Counting"
 		AbstractionLevel.ADDITION:
-			return "덧셈의 시대"
+			return "Addition"
 		AbstractionLevel.MULTIPLICATION:
-			return "곱셈의 시대"
+			return "Multiplication"
 		_:
-			return "알 수 없음"
+			return "Unknown"
+
+func reset() -> void:
+	current_level = AbstractionLevel.CHAOS
+	for concept_name in unlocked_concepts.keys():
+		unlocked_concepts[concept_name] = false
+	abstraction_changed.emit(current_level)
 
 func _update_level() -> void:
 	var new_level: int = AbstractionLevel.CHAOS

@@ -1,19 +1,270 @@
-[gd_scene load_steps=8 format=3 uid="uid://c8y5xklsn7c4d"]
+[gd_scene load_steps=3 format=3 uid="uid://c8y5xklsn7c4d"]
 
 [ext_resource type="Script" path="res://main/Main.gd" id="1_main"]
-[ext_resource type="PackedScene" path="res://scenes/world/WorldRoot.tscn" id="2_world"]
-[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="3_player"]
-[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="4_hud"]
-[ext_resource type="PackedScene" path="res://scenes/ui/DialogueBox.tscn" id="5_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DialogueBox.tscn" id="2_dialogue"]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_main")
 
-[node name="WorldRoot" parent="." instance=ExtResource("2_world")]
+[node name="MapScreen" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Player" parent="." instance=ExtResource("3_player")]
-position = Vector2(640, 520)
+[node name="MarginContainer" type="MarginContainer" parent="MapScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="HUD" parent="." instance=ExtResource("4_hud")]
+[node name="VBoxContainer" type="VBoxContainer" parent="MapScreen/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
 
-[node name="DialogueBox" parent="." instance=ExtResource("5_dialogue")]
+[node name="HeaderPanel" type="PanelContainer" parent="MapScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MapScreen/MarginContainer/VBoxContainer/HeaderPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="HeaderVBox" type="VBoxContainer" parent="MapScreen/MarginContainer/VBoxContainer/HeaderPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ChapterLabel" type="Label" parent="MapScreen/MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Chapter"
+
+[node name="ProgressLabel" type="Label" parent="MapScreen/MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Progress"
+
+[node name="ChapterNoteLabel" type="Label" parent="MapScreen/MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "Chapter note"
+
+[node name="BodyHBox" type="HBoxContainer" parent="MapScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="LevelsPanel" type="PanelContainer" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/LevelsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="LevelsVBox" type="VBoxContainer" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/LevelsPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LevelsTitle" type="Label" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/LevelsPanel/MarginContainer/LevelsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Puzzle stages"
+
+[node name="LevelGrid" type="GridContainer" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/LevelsPanel/MarginContainer/LevelsVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="LevelStatusLabel" type="Label" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/LevelsPanel/MarginContainer/LevelsVBox"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "Level status"
+
+[node name="RestorePanel" type="PanelContainer" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/RestorePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="RestoreVBox" type="VBoxContainer" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/RestorePanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="RestoreTitle" type="Label" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/RestorePanel/MarginContainer/RestoreVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Restoration"
+
+[node name="PreviewLabel" type="Label" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/RestorePanel/MarginContainer/RestoreVBox"]
+custom_minimum_size = Vector2(0, 170)
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 20
+text = "Preview"
+vertical_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/RestorePanel/MarginContainer/RestoreVBox"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "Restore status"
+
+[node name="TaskList" type="VBoxContainer" parent="MapScreen/MarginContainer/VBoxContainer/BodyHBox/RestorePanel/MarginContainer/RestoreVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="FooterPanel" type="PanelContainer" parent="MapScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MapScreen/MarginContainer/VBoxContainer/FooterPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="FooterLabel" type="Label" parent="MapScreen/MarginContainer/VBoxContainer/FooterPanel/MarginContainer"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "Teaser"
+
+[node name="PuzzleScreen" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PuzzleScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PuzzleScreen/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="PuzzleHeader" type="PanelContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzleHeader"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="HeaderVBox" type="VBoxContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzleHeader/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PuzzleTitle" type="Label" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzleHeader/MarginContainer/HeaderVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Puzzle"
+
+[node name="PuzzleGoal" type="Label" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzleHeader/MarginContainer/HeaderVBox"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 22
+text = "Goal"
+
+[node name="PuzzleHint" type="Label" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzleHeader/MarginContainer/HeaderVBox"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "Hint"
+
+[node name="PuzzleStats" type="Label" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzleHeader/MarginContainer/HeaderVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Stats"
+
+[node name="PuzzlePanel" type="PanelContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzlePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="PuzzleGrid" type="GridContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzlePanel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="PuzzleFooter" type="VBoxContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ResultLabel" type="Label" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzleFooter"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "Result"
+vertical_alignment = 1
+
+[node name="ButtonRow" type="HBoxContainer" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzleFooter"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ClearButton" type="Button" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzleFooter/ButtonRow"]
+custom_minimum_size = Vector2(220, 54)
+layout_mode = 2
+disabled = true
+text = "Back to map"
+
+[node name="BackButton" type="Button" parent="PuzzleScreen/MarginContainer/VBoxContainer/PuzzleFooter/ButtonRow"]
+custom_minimum_size = Vector2(220, 54)
+layout_mode = 2
+text = "Stage select"
+
+[node name="DialogueBox" parent="." instance=ExtResource("2_dialogue")]
