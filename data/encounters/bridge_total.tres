@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EncounterDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/encounter/EncounterDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+encounter_id = "bridge_total"
+title = "다리 장부"
+objective_text = "전체 합을 10 이상으로 만드세요."
+flavor_text = "다리는 각 돌의 위치보다 전체 지지 합을 더 중요하게 봅니다."
+concept_focus = "addition"
+concept_unlock = "addition"
+slot_count = 4
+starting_values = Array[int]([1, 2, 0, 0])
+objective_type = "reach_total"
+objective_target_total = 10
+turn_limit = 4
+plays_per_turn = 3
+hand_size = 5
+entropy_pattern = "none"
+reward_type = "card_draft"
+reward_card_paths = Array[String](["res://data/cards/add_total_recall.tres", "res://data/cards/add_lift_smallest.tres", "res://data/cards/add_count_the_active.tres"])

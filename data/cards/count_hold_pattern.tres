@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cards/CardDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+card_id = "count_hold_pattern"
+title = "패턴 고정"
+description = "선택한 슬롯을 다음 붕괴로부터 보호합니다."
+concept = "counting"
+tags = Array[String](["utility", "preserve"])
+effect_id = "guard"
+target_mode = "slot"
+energy_cost = 1
+rarity = "starter"

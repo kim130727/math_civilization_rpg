@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EncounterDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/encounter/EncounterDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+encounter_id = "equal_rows"
+title = "배열 작업장"
+objective_text = "세 슬롯을 모두 4의 같은 그룹으로 만드세요."
+flavor_text = "작업장은 같은 줄이 반복될 때만 깨어납니다."
+concept_focus = "multiplication"
+concept_unlock = "multiplication"
+slot_count = 3
+starting_values = Array[int]([1, 0, 0])
+objective_type = "equal_groups"
+objective_target_total = 4
+turn_limit = 4
+plays_per_turn = 3
+hand_size = 5
+entropy_pattern = "none"
+reward_type = "card_draft"
+reward_card_paths = Array[String](["res://data/cards/mul_echo_group.tres", "res://data/cards/mul_double.tres", "res://data/cards/mul_array_pulse.tres"])

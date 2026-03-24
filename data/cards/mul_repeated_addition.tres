@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cards/CardDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+card_id = "mul_repeated_addition"
+title = "반복 덧셈"
+description = "선택한 슬롯 값을 다른 활성 슬롯에 반복해서 더합니다."
+concept = "multiplication"
+tags = Array[String](["multiplication", "repeat"])
+effect_id = "broadcast_value"
+target_mode = "slot"
+energy_cost = 1
+rarity = "uncommon"

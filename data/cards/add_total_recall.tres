@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cards/CardDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+card_id = "add_total_recall"
+title = "합 회수"
+description = "다른 슬롯의 값을 선택한 슬롯으로 모두 모읍니다."
+concept = "addition"
+tags = Array[String](["addition", "consolidate"])
+effect_id = "merge_all_into_target"
+target_mode = "slot"
+energy_cost = 1
+rarity = "common"

@@ -1,0 +1,102 @@
+[gd_scene load_steps=2 format=3 uid="uid://1y4l7ecfd6p8u"]
+
+[ext_resource type="Script" path="res://scripts/run/RunMapView.gd" id="1_script"]
+
+[node name="RunMapView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="HeaderPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HeaderPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="HeaderVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HeaderPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RunTitleLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "런"
+
+[node name="RunSummaryLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "설명"
+
+[node name="MapPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/MapPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="NodeCanvas" type="Control" parent="MarginContainer/VBoxContainer/MapPanel/MarginContainer"]
+custom_minimum_size = Vector2(0, 340)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="InfoPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/InfoPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="InfoVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/InfoPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DeckSummaryLabel" type="Label" parent="MarginContainer/VBoxContainer/InfoPanel/MarginContainer/InfoVBox"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "덱"
+
+[node name="RelicSummaryLabel" type="Label" parent="MarginContainer/VBoxContainer/InfoPanel/MarginContainer/InfoVBox"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "유물"
+
+[node name="NodeNoteLabel" type="Label" parent="MarginContainer/VBoxContainer/InfoPanel/MarginContainer/InfoVBox"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "노드 설명"
+

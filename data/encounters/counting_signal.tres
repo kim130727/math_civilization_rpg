@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EncounterDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/encounter/EncounterDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+encounter_id = "counting_signal"
+title = "신호 계수"
+objective_text = "정확히 [1, 2, 3] 구조를 만드세요."
+flavor_text = "고장 난 신호기는 정확한 계수 패턴에만 반응합니다."
+concept_focus = "counting"
+slot_count = 3
+starting_values = Array[int]([0, 0, 0])
+objective_type = "exact_targets"
+objective_target_values = Array[int]([1, 2, 3])
+turn_limit = 4
+plays_per_turn = 3
+hand_size = 5
+entropy_pattern = "none"
+reward_type = "card_draft"
+reward_card_paths = Array[String](["res://data/cards/add_increment_wave.tres", "res://data/cards/add_fill_to_five.tres", "res://data/cards/count_hold_pattern.tres"])

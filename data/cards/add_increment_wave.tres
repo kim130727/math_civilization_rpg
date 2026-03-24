@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cards/CardDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+card_id = "add_increment_wave"
+title = "증가 파동"
+description = "값이 있는 모든 슬롯에 1을 더합니다. 넓게 키우는 덧셈 카드입니다."
+concept = "addition"
+tags = Array[String](["addition", "wide"])
+effect_id = "add_to_all_filled"
+target_mode = "none"
+energy_cost = 1
+primary_value = 1
+rarity = "common"

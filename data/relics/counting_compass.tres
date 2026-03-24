@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RelicDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/relics/RelicDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+relic_id = "counting_compass"
+title = "계수 나침반"
+description = "전투 시작 시 가장 왼쪽 슬롯이 +1 상태로 시작합니다."
+trigger = "encounter_start"
+effect_id = "add_leftmost"
+primary_value = 1

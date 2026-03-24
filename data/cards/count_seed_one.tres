@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cards/CardDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+card_id = "count_seed_one"
+title = "씨앗 하나"
+description = "선택한 슬롯에 1을 더합니다. 정확한 수를 맞추는 기본 카드입니다."
+concept = "counting"
+tags = Array[String](["value", "precision"])
+effect_id = "add"
+target_mode = "slot"
+energy_cost = 1
+primary_value = 1
+rarity = "starter"

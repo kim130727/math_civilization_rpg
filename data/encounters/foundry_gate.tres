@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EncounterDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/encounter/EncounterDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+encounter_id = "foundry_gate"
+title = "주조 관문"
+objective_text = "붕괴를 견디며 세 슬롯을 모두 6의 같은 그룹으로 만드세요."
+flavor_text = "오래된 관문은 흔들림 없이 반복되는 기계만 통과시킵니다."
+concept_focus = "multiplication"
+slot_count = 3
+starting_values = Array[int]([1, 1, 1])
+objective_type = "equal_groups"
+objective_target_total = 6
+turn_limit = 5
+plays_per_turn = 3
+hand_size = 5
+entropy_pattern = "decay_all_unprotected"
+entropy_value = 1
+reward_type = "relic_choice"
+reward_relic_paths = Array[String](["res://data/relics/counting_compass.tres", "res://data/relics/quiet_chalk.tres"])

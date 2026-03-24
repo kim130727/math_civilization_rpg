@@ -14,17 +14,14 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="Math Civilization Puzzle"
+config/name="Math Civilization Roguelike"
 run/main_scene="res://main/Main.tscn"
 config/features=PackedStringArray("4.6")
 
 [autoload]
 
-GameState="*res://scripts/autoload/GameState.gd"
-AbstractionManager="*res://scripts/autoload/AbstractionManager.gd"
-InventoryManager="*res://scripts/autoload/InventoryManager.gd"
 DialogueManager="*res://scripts/autoload/DialogueManager.gd"
-PuzzleProgress="*res://scripts/autoload/PuzzleProgress.gd"
+MetaProgression="*res://scripts/autoload/MetaProgression.gd"
 
 [display]
 

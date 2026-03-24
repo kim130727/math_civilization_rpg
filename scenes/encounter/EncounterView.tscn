@@ -1,0 +1,137 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3dpr7yo5vcdb"]
+
+[ext_resource type="Script" path="res://scripts/encounter/EncounterView.gd" id="1_script"]
+
+[node name="EncounterView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="HeaderPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HeaderPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="HeaderVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HeaderPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "전투"
+
+[node name="ObjectiveLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 20
+text = "목표"
+
+[node name="TurnLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "턴"
+
+[node name="LogLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderPanel/MarginContainer/HeaderVBox"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "기록"
+vertical_alignment = 1
+
+[node name="BodyHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="SlotsPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/BodyHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/BodyHBox/SlotsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="SlotsVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BodyHBox/SlotsPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SlotsTitle" type="Label" parent="MarginContainer/VBoxContainer/BodyHBox/SlotsPanel/MarginContainer/SlotsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "구조 슬롯"
+
+[node name="SlotRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/BodyHBox/SlotsPanel/MarginContainer/SlotsVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="HandPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/BodyHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/BodyHBox/HandPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="HandVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BodyHBox/HandPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DeckLabel" type="Label" parent="MarginContainer/VBoxContainer/BodyHBox/HandPanel/MarginContainer/HandVBox"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+text = "안내"
+
+[node name="HandList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BodyHBox/HandPanel/MarginContainer/HandVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="FooterRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="EndTurnButton" type="Button" parent="MarginContainer/VBoxContainer/FooterRow"]
+custom_minimum_size = Vector2(220, 54)
+layout_mode = 2
+text = "턴 종료"
+
+[node name="RetreatButton" type="Button" parent="MarginContainer/VBoxContainer/FooterRow"]
+custom_minimum_size = Vector2(220, 54)
+layout_mode = 2
+text = "맵으로 후퇴"
+

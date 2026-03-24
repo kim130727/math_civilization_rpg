@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ArchetypeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/run/ArchetypeDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+archetype_id = "field_cartographer"
+title = "현장 도식가"
+description = "수량을 먼저 읽기 쉽게 만들고, 그다음 더 큰 구조로 접어 올리는 사색형 시작 캐릭터입니다."
+fantasy_text = "당신은 수를 재료로 스케치하고, 그 재료를 다시 패턴으로 세웁니다."
+starter_card_paths = Array[String](["res://data/cards/count_seed_one.tres", "res://data/cards/count_seed_one.tres", "res://data/cards/count_seed_two.tres", "res://data/cards/count_seed_two.tres", "res://data/cards/count_seed_three.tres", "res://data/cards/count_survey_line.tres", "res://data/cards/count_hold_pattern.tres", "res://data/cards/add_increment_wave.tres", "res://data/cards/add_total_recall.tres", "res://data/cards/mul_double.tres"])
+starter_relic_paths = Array[String](["res://data/relics/counting_compass.tres"])
+starter_concepts = Array[String](["counting"])

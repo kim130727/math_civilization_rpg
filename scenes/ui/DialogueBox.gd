@@ -1,4 +1,4 @@
-extends CanvasLayer
+﻿extends CanvasLayer
 
 @onready var panel: PanelContainer = $MarginContainer/PanelContainer
 @onready var label: Label = $MarginContainer/PanelContainer/MarginContainer/Label
@@ -8,7 +8,7 @@ func _ready() -> void:
 	DialogueManager.dialogue_requested.connect(_on_dialogue_requested)
 
 func _on_dialogue_requested(text: String) -> void:
-	label.text = text + "\n\nPress Enter to close"
+	label.text = text + "\n\nEnter 또는 클릭으로 닫기"
 	panel.show()
 
 func hide_dialogue() -> void:
@@ -24,3 +24,4 @@ func _unhandled_input(event: InputEvent) -> void:
 		var mouse_event := event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
 			panel.hide()
+

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cards/CardDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+card_id = "count_survey_line"
+title = "측량선"
+description = "가장 작은 두 슬롯에 각각 1을 더합니다. 분산 세기에 좋습니다."
+concept = "counting"
+tags = Array[String](["value", "spread"])
+effect_id = "add_to_lowest"
+target_mode = "none"
+energy_cost = 1
+primary_value = 1
+secondary_value = 2
+rarity = "starter"

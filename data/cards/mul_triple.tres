@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cards/CardDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+card_id = "mul_triple"
+title = "세 배"
+description = "선택한 슬롯을 3배로 만듭니다. 기반 구조가 있을 때 강합니다."
+concept = "multiplication"
+tags = Array[String](["multiplication", "scale"])
+effect_id = "multiply"
+target_mode = "slot"
+energy_cost = 1
+primary_value = 3
+rarity = "uncommon"

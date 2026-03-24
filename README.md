@@ -1,55 +1,66 @@
-# Math Civilization Puzzle
+# Math Civilization Roguelike
 
-Godot 4 based puzzle game prototype.
+Godot 4 deckbuilding roguelike prototype about mathematical abstraction as strategy.
 
-The project is pivoting from a field-exploration RPG into a mobile-first puzzle game where players naturally learn math abstractions by solving short, satisfying puzzle stages and rebuilding the world.
+This repository no longer treats match-3 or free-walking exploration as the core gameplay. The primary game loop is now:
 
-## New Direction
+1. Start a run with a thinker archetype and a small starter deck
+2. Move through a node map of encounters
+3. Enter a mathematical structure encounter
+4. Play cards to build, combine, preserve, and scale values across slots
+5. Clear the objective and draft a new card or relic
+6. Push into harder abstractions
 
-- Core genre: casual puzzle game
-- Reference feel: restore-and-progress structure similar to mobile renovation puzzle games
-- Core fantasy: math is not a school subject, but a tool that repairs, organizes, and expands the world
-- Learning flow: count -> add -> multiply -> fractions -> divide -> advanced abstractions
+## Design Direction
 
-## Core Loop
+- Counting is precision and exact placement
+- Addition is consolidation and efficient accumulation
+- Multiplication is repetition, equal groups, and scaling
+- Encounters are objective-driven structures, not HP races
+- Cards express operations and transformations instead of flavored attack numbers
 
-1. Clear a short puzzle stage
-2. Earn stars, resources, or concept fragments
-3. Restore part of the world
-4. Unlock a new math idea through play
-5. Use the new idea in later puzzle mechanics
+## Current Vertical Slice
 
-## Design Goals
+- 1 archetype: `Field Cartographer`
+- 15 data-driven cards
+- 5 encounter templates
+- 2 relics
+- 1 mini run map
+- `MetaProgression` save data for concept and discovery tracking
 
-- Teach math through repeated play, not long explanations
-- Make every new concept visible in the world
-- Keep stages short and mobile-friendly
-- Reward experimentation and pattern recognition
-- Build a strong sense of progress through restoration and unlocks
+## Architecture
 
-## Current Project State
+### Core runtime
 
-The existing implementation still contains the earlier RPG-style prototype:
+- `main/Main.tscn`
+- `scripts/app/MainFlowController.gd`
+- `scripts/run/RunState.gd`
+- `scripts/deck/DeckManager.gd`
+- `scripts/encounter/EncounterEngine.gd`
+- `scripts/rewards/RewardGenerator.gd`
 
-- player movement and interaction
-- world objects and dialogue
-- abstraction unlock manager
-- early gate/resource progression
+### Data resources
 
-These systems are now best treated as prototype references while the project transitions to a puzzle-first structure.
+- `scripts/cards/CardDefinition.gd`
+- `scripts/encounter/EncounterDefinition.gd`
+- `scripts/relics/RelicDefinition.gd`
+- `scripts/run/ArchetypeDefinition.gd`
+- `scripts/run/RunNodeDefinition.gd`
+- `scripts/run/RunMapDefinition.gd`
 
-## Suggested Next Build Steps
+### Scenes
 
-1. Replace movement-centric main scene with a puzzle hub + stage flow
-2. Build a reusable puzzle board scene
-3. Add chapter progression for counting, addition, and multiplication
-4. Add star rewards and restoration tasks
-5. Convert abstraction unlocks into puzzle mechanic unlocks
+- `scenes/run/RunMapView.tscn`
+- `scenes/encounter/EncounterView.tscn`
+- `scenes/reward/RewardView.tscn`
+- `scenes/ui/DialogueBox.tscn`
 
-## Main Scene
+## Legacy
 
-- `res://main/Main.tscn`
+Earlier exploration-RPG and match-3 systems have been isolated under `legacy/` so the deckbuilder architecture remains the primary truth of the project.
 
-## Docs
+## Notes For Iteration
 
-- `res://GAME_DESIGN.md`
+- The encounter UI is intentionally plain while the architecture settles.
+- TODO hooks are left in the engine for richer entropy, relic timings, and more complex card rules.
+- Future content can extend fractions, division, arrays, relations, and higher abstractions by adding new resources and effect handlers rather than rewriting the core loop.

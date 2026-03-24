@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cards/CardDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+card_id = "mul_echo_group"
+title = "그룹 메아리"
+description = "선택한 슬롯 값을 첫 번째 빈 슬롯에 복제합니다."
+concept = "multiplication"
+tags = Array[String](["multiplication", "groups"])
+effect_id = "copy_to_empty"
+target_mode = "slot"
+energy_cost = 1
+rarity = "common"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cards/CardDefinition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+card_id = "add_fill_to_five"
+title = "다섯까지 채우기"
+description = "선택한 슬롯이 5보다 작다면 5까지 올립니다."
+concept = "addition"
+tags = Array[String](["addition", "threshold"])
+effect_id = "fill_to"
+target_mode = "slot"
+energy_cost = 1
+primary_value = 5
+rarity = "common"
