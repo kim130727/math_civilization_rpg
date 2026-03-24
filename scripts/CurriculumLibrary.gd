@@ -1,8 +1,8 @@
 extends RefCounted
 class_name CurriculumLibrary
 
-const MANIFEST_PATH := "res://content/curriculum/elementary_curriculum.json"
-const TEMPLATE_PATH := "res://content/curriculum/stage_templates.json"
+const MANIFEST_PATH := "res://data/curriculum/elementary_curriculum.json"
+const TEMPLATE_PATH := "res://data/curriculum/stage_templates.json"
 
 static func load_manifest() -> Dictionary:
 	return _load_json_file(MANIFEST_PATH)

@@ -4,16 +4,16 @@
 
 [resource]
 script = ExtResource("1_script")
-level_id = "add_02"
-title = "2. Heavy Stones"
+level_id = "add_10"
+title = "10. Bridge Boss"
 grade_id = "grade1"
 chapter_id = "addition"
-unit_id = "g1_addition_make10"
+unit_id = "g1_addition_mastery"
 rule_type = "addition_total"
 board_width = 6
 board_height = 6
-palette = Array[int]([1, 2, 3, 4])
-goal_target_amount = 24
-move_limit = 10
-hint = "Look for larger groups to build the total faster."
-star_thresholds = Array[int]([4, 2])
+palette = Array[int]([2, 3, 4, 5])
+goal_target_amount = 36
+move_limit = 9
+hint = "Final addition challenge. Build the full bridge with efficient sums."
+star_thresholds = Array[int]([3, 1])

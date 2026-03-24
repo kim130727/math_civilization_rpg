@@ -8,26 +8,38 @@ signal chapter_unlocked(chapter_id: String)
 const FALLBACK_CHAPTERS := [
 	{"id": "counting", "title": "Counting Village", "concept_name": "number_1", "grade_id": "grade1", "unit_id": "g1_counting_intro"},
 	{"id": "addition", "title": "Addition Bridge", "concept_name": "addition", "grade_id": "grade1", "unit_id": "g1_addition_intro"},
+	{"id": "multiplication", "title": "Multiplication Workshop", "concept_name": "multiplication", "grade_id": "grade1", "unit_id": "g1_multiplication_intro"},
 ]
 
 const FALLBACK_LEVELS := {
-	"count_01": "res://content/levels/grade1_counting_01.tres",
-	"count_02": "res://content/levels/grade1_counting_02.tres",
-	"count_03": "res://content/levels/grade1_counting_03.tres",
-	"count_04": "res://content/levels/grade1_counting_04.tres",
-	"count_05": "res://content/levels/grade1_counting_05.tres",
-	"count_06": "res://content/levels/grade1_counting_06.tres",
-	"count_07": "res://content/levels/grade1_counting_07.tres",
-	"count_08": "res://content/levels/grade1_counting_08.tres",
-	"count_09": "res://content/levels/grade1_counting_09.tres",
-	"count_10": "res://content/levels/grade1_counting_10.tres",
-	"add_01": "res://content/levels/grade1_addition_01.tres",
-	"add_02": "res://content/levels/grade1_addition_02.tres",
+	"count_01": "res://data/levels/grade1_counting_01.tres",
+	"count_02": "res://data/levels/grade1_counting_02.tres",
+	"count_03": "res://data/levels/grade1_counting_03.tres",
+	"count_04": "res://data/levels/grade1_counting_04.tres",
+	"count_05": "res://data/levels/grade1_counting_05.tres",
+	"count_06": "res://data/levels/grade1_counting_06.tres",
+	"count_07": "res://data/levels/grade1_counting_07.tres",
+	"count_08": "res://data/levels/grade1_counting_08.tres",
+	"count_09": "res://data/levels/grade1_counting_09.tres",
+	"count_10": "res://data/levels/grade1_counting_10.tres",
+	"add_01": "res://data/levels/grade1_addition_01.tres",
+	"add_02": "res://data/levels/grade1_addition_02.tres",
+	"add_03": "res://data/levels/grade1_addition_03.tres",
+	"add_04": "res://data/levels/grade1_addition_04.tres",
+	"add_05": "res://data/levels/grade1_addition_05.tres",
+	"add_06": "res://data/levels/grade1_addition_06.tres",
+	"add_07": "res://data/levels/grade1_addition_07.tres",
+	"add_08": "res://data/levels/grade1_addition_08.tres",
+	"add_09": "res://data/levels/grade1_addition_09.tres",
+	"add_10": "res://data/levels/grade1_addition_10.tres",
+	"mul_01": "res://data/levels/grade1_multiplication_01.tres",
+	"mul_02": "res://data/levels/grade1_multiplication_02.tres",
 }
 
 const FALLBACK_CHAPTER_LEVEL_IDS := {
 	"counting": ["count_01", "count_02", "count_03", "count_04", "count_05", "count_06", "count_07", "count_08", "count_09", "count_10"],
-	"addition": ["add_01", "add_02"],
+	"addition": ["add_01", "add_02", "add_03", "add_04", "add_05", "add_06", "add_07", "add_08", "add_09", "add_10"],
+	"multiplication": ["mul_01", "mul_02"],
 }
 
 const FALLBACK_RESTORATION_TASKS := [
@@ -37,6 +49,9 @@ const FALLBACK_RESTORATION_TASKS := [
 	{"id": "add_pillars", "chapter_id": "addition", "title": "Raise Bridge Pillars", "description": "Add stone supports so the bridge can carry grouped weight.", "cost": 4},
 	{"id": "add_arch", "chapter_id": "addition", "title": "Complete the Main Arch", "description": "Balanced sums hold the bridge together.", "cost": 8},
 	{"id": "add_caravan", "chapter_id": "addition", "title": "Open the Trade Route", "description": "The bridge now supports travelers and supplies.", "cost": 12},
+	{"id": "mul_frames", "chapter_id": "multiplication", "title": "Raise Array Frames", "description": "Equal rows of beams turn the yard into a true workshop.", "cost": 5},
+	{"id": "mul_crates", "chapter_id": "multiplication", "title": "Stack Repeating Crates", "description": "Supplies line up into repeatable groups.", "cost": 9},
+	{"id": "mul_foundry", "chapter_id": "multiplication", "title": "Open the Array Foundry", "description": "The workshop now rebuilds structures through equal groups.", "cost": 13},
 ]
 
 var CHAPTERS: Array = []
@@ -57,6 +72,12 @@ func _ready() -> void:
 
 func get_curriculum_manifest() -> Dictionary:
 	return _curriculum_manifest
+
+func get_unlock_requirement(chapter_id: String) -> Dictionary:
+	var chapter := get_chapter(chapter_id)
+	if chapter.is_empty():
+		return {}
+	return chapter.get("unlock", {})
 
 func get_grade(grade_id: String) -> Dictionary:
 	for grade in _curriculum_manifest.get("grades", []):
@@ -86,7 +107,7 @@ func get_levels_for_chapter(chapter_id: String) -> Array:
 	return results
 
 func get_level(level_id: String) -> Dictionary:
-	var resource: Resource = get_level_resource(level_id)
+	var resource: Variant = get_level_resource(level_id)
 	if resource == null:
 		return {}
 	return {
@@ -98,14 +119,34 @@ func get_level(level_id: String) -> Dictionary:
 		"goal_target_value": resource.goal_target_value,
 		"goal_target_amount": resource.goal_target_amount,
 		"move_limit": resource.move_limit,
+		"grade_id": resource.grade_id,
 	}
+
+func is_level_unlocked(chapter_id: String, index: int) -> bool:
+	if index <= 0:
+		return true
+	var levels := get_levels_for_chapter(chapter_id)
+	if index >= levels.size():
+		return false
+	var previous_level_id: String = String(levels[index - 1].get("id", ""))
+	return get_stars_for_level(previous_level_id) > 0
+
+func get_next_level_id(chapter_id: String, current_level_id: String) -> String:
+	var levels := get_levels_for_chapter(chapter_id)
+	for i in range(levels.size()):
+		if String(levels[i].get("id", "")) != current_level_id:
+			continue
+		if i + 1 < levels.size():
+			return String(levels[i + 1].get("id", ""))
+		break
+	return ""
 
 func get_level_resource(level_id: String):
 	if _level_cache.has(level_id):
 		return _level_cache[level_id]
 	if not _level_paths.has(level_id):
 		return null
-	var resource: Resource = load(String(_level_paths[level_id]))
+	var resource: Variant = load(String(_level_paths[level_id]))
 	_level_cache[level_id] = resource
 	return resource
 
@@ -204,19 +245,21 @@ func _check_unlocks() -> void:
 		var chapter_id: String = String(chapter.get("id", ""))
 		if chapter_id == "" or is_chapter_unlocked(chapter_id):
 			continue
-		var unlock: Dictionary = chapter.get("unlock", {})
-		var required_chapter_id: String = String(unlock.get("chapter_id", ""))
-		if required_chapter_id == "":
-			continue
-		var required_level_clear: bool = bool(unlock.get("complete_levels", false))
-		var required_restoration_clear: bool = bool(unlock.get("complete_restoration", false))
-		var chapter_clear: bool = not required_level_clear or get_completed_level_count(required_chapter_id) == get_levels_for_chapter(required_chapter_id).size()
-		var restoration_clear: bool = not required_restoration_clear or get_restoration_completion_ratio(required_chapter_id) >= 1.0
-		if chapter_clear and restoration_clear:
+		if _meets_unlock_rule(get_unlock_requirement(chapter_id)):
 			unlocked_chapters[chapter_id] = true
 			_unlock_chapter_concept(chapter_id)
 			chapter_unlocked.emit(chapter_id)
 			progress_changed.emit()
+
+func _meets_unlock_rule(unlock: Dictionary) -> bool:
+	var required_chapter_id: String = String(unlock.get("chapter_id", ""))
+	if required_chapter_id == "":
+		return false
+	var require_level_clear: bool = bool(unlock.get("complete_levels", false))
+	var require_restoration_clear: bool = bool(unlock.get("complete_restoration", false))
+	var level_clear_met: bool = not require_level_clear or get_completed_level_count(required_chapter_id) == get_levels_for_chapter(required_chapter_id).size()
+	var restoration_met: bool = not require_restoration_clear or get_restoration_completion_ratio(required_chapter_id) >= 1.0
+	return level_clear_met and restoration_met
 
 func _unlock_chapter_concept(chapter_id: String) -> void:
 	var chapter := get_chapter(chapter_id)

@@ -5,10 +5,10 @@
 [resource]
 script = ExtResource("1_script")
 level_id = "add_01"
-title = "Level 1"
+title = "1. Build the Bridge"
 grade_id = "grade1"
 chapter_id = "addition"
-unit_id = "g1_addition"
+unit_id = "g1_addition_intro"
 rule_type = "addition_total"
 board_width = 6
 board_height = 6

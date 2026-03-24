@@ -4,16 +4,16 @@
 
 [resource]
 script = ExtResource("1_script")
-level_id = "add_02"
-title = "2. Heavy Stones"
+level_id = "add_07"
+title = "7. Twin Pillars"
 grade_id = "grade1"
 chapter_id = "addition"
-unit_id = "g1_addition_make10"
+unit_id = "g1_addition_mastery"
 rule_type = "addition_total"
 board_width = 6
 board_height = 6
-palette = Array[int]([1, 2, 3, 4])
-goal_target_amount = 24
+palette = Array[int]([1, 2, 3, 4, 5])
+goal_target_amount = 28
 move_limit = 10
-hint = "Look for larger groups to build the total faster."
+hint = "Larger values are in play now. Watch for strong cascades."
 star_thresholds = Array[int]([4, 2])

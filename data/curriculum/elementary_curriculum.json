@@ -1,0 +1,1211 @@
+﻿{
+    "schema_version":  1,
+    "game_title":  "Math Civilization Puzzle",
+    "curriculum_scope":  "Korean elementary mathematics grades 1-6",
+    "grades":  [
+                   {
+                       "id":  "grade1",
+                       "title":  "Grade 1 - Seedlight Plains",
+                       "theme":  "The player restores a foggy village by learning to count, compare, combine, and sort the world.",
+                       "level_progression_style":  "Very short guided stages with low palette size and visible counting groups.",
+                       "mechanic_progression":  [
+                                                    "count visible groups",
+                                                    "compare greater/smaller",
+                                                    "build small sums",
+                                                    "build equal groups",
+                                                    "remove to show subtraction",
+                                                    "clear simple shapes",
+                                                    "measure with repeated units"
+                                                ],
+                       "objective_types":  [
+                                               "collect_target",
+                                               "compare_quantities",
+                                               "addition_total",
+                                               "multiplication_total",
+                                               "subtraction_balance",
+                                               "shape_clear",
+                                               "measure_path"
+                                           ],
+                       "tutorial_progression":  [
+                                                    "show one idea at a time",
+                                                    "teach with feedback after the move",
+                                                    "name the term after the mechanic is experienced"
+                                                ],
+                       "boss_role":  "Checks that the player can read and act on a mixed set of early math goals.",
+                       "restoration_hooks":  [
+                                                 "restore market stalls",
+                                                 "light number lanterns",
+                                                 "organize path markers"
+                                             ],
+                       "chapters":  [
+                                        {
+                                            "id":  "counting",
+                                            "title":  "Counting Village",
+                                            "theme":  "Objects separate into countable groups and the village square becomes readable.",
+                                            "concept_name":  "number_1",
+                                            "entry_unit_id":  "g1_counting_intro",
+                                            "starts_unlocked":  true,
+                                            "unlock":  {
+
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g1_counting_intro",
+                                                              "title":  "See and Count 1-3",
+                                                              "learning_goal":  "Match visible groups to numbers 1 to 3.",
+                                                              "mechanic_focus":  "target collection",
+                                                              "tutorial_beats":  [
+                                                                                     "tap and swap",
+                                                                                     "count the dots",
+                                                                                     "match the asked value"
+                                                                                 ]
+                                                          },
+                                                          {
+                                                              "id":  "g1_counting_compare",
+                                                              "title":  "More and Less",
+                                                              "learning_goal":  "Notice which value is bigger or smaller.",
+                                                              "mechanic_focus":  "quantity comparison",
+                                                              "tutorial_beats":  [
+                                                                                     "compare two target values",
+                                                                                     "collect the larger group",
+                                                                                     "collect the smaller group"
+                                                                                 ]
+                                                          },
+                                                          {
+                                                              "id":  "g1_counting_extend",
+                                                              "title":  "Count to 5",
+                                                              "learning_goal":  "Read and collect groups up to 5.",
+                                                              "mechanic_focus":  "larger palette counting",
+                                                              "tutorial_beats":  [
+                                                                                     "introduce 4",
+                                                                                     "introduce 5",
+                                                                                     "mix 1-5 targets"
+                                                                                 ]
+                                                          },
+                                                          {
+                                                              "id":  "g1_counting_mastery",
+                                                              "title":  "Mixed Counting Challenge",
+                                                              "learning_goal":  "Use quick counting in a busier board.",
+                                                              "mechanic_focus":  "mixed target collection",
+                                                              "tutorial_beats":  [
+                                                                                     "switch targets",
+                                                                                     "work within move limits",
+                                                                                     "finish a chapter challenge"
+                                                                                 ]
+                                                          }
+                                                      ],
+                                            "restoration_tasks":  [
+                                                                      {
+                                                                          "id":  "count_square",
+                                                                          "chapter_id":  "counting",
+                                                                          "title":  "Restore Number Square",
+                                                                          "description":  "The plaza tiles now separate objects into neat countable spaces.",
+                                                                          "cost":  3
+                                                                      },
+                                                                      {
+                                                                          "id":  "count_lanterns",
+                                                                          "chapter_id":  "counting",
+                                                                          "title":  "Hang Lantern Rows",
+                                                                          "description":  "Street lanterns glow in clear repeating groups.",
+                                                                          "cost":  6
+                                                                      },
+                                                                      {
+                                                                          "id":  "count_market",
+                                                                          "chapter_id":  "counting",
+                                                                          "title":  "Open Counting Market",
+                                                                          "description":  "Every stall shows tidy sets and visible prices.",
+                                                                          "cost":  9
+                                                                      }
+                                                                  ],
+                                            "levels":  [
+                                                           {
+                                                               "id":  "count_01",
+                                                               "resource_path":  "res://data/levels/grade1_counting_01.tres",
+                                                               "unit_id":  "g1_counting_intro",
+                                                               "difficulty_role":  "introduction"
+                                                           },
+                                                           {
+                                                               "id":  "count_02",
+                                                               "resource_path":  "res://data/levels/grade1_counting_02.tres",
+                                                               "unit_id":  "g1_counting_intro",
+                                                               "difficulty_role":  "guided_discovery"
+                                                           },
+                                                           {
+                                                               "id":  "count_03",
+                                                               "resource_path":  "res://data/levels/grade1_counting_03.tres",
+                                                               "unit_id":  "g1_counting_intro",
+                                                               "difficulty_role":  "practice"
+                                                           },
+                                                           {
+                                                               "id":  "count_04",
+                                                               "resource_path":  "res://data/levels/grade1_counting_04.tres",
+                                                               "unit_id":  "g1_counting_compare",
+                                                               "difficulty_role":  "variation"
+                                                           },
+                                                           {
+                                                               "id":  "count_05",
+                                                               "resource_path":  "res://data/levels/grade1_counting_05.tres",
+                                                               "unit_id":  "g1_counting_compare",
+                                                               "difficulty_role":  "challenge"
+                                                           },
+                                                           {
+                                                               "id":  "count_06",
+                                                               "resource_path":  "res://data/levels/grade1_counting_06.tres",
+                                                               "unit_id":  "g1_counting_compare",
+                                                               "difficulty_role":  "reward"
+                                                           },
+                                                           {
+                                                               "id":  "count_07",
+                                                               "resource_path":  "res://data/levels/grade1_counting_07.tres",
+                                                               "unit_id":  "g1_counting_extend",
+                                                               "difficulty_role":  "new_twist"
+                                                           },
+                                                           {
+                                                               "id":  "count_08",
+                                                               "resource_path":  "res://data/levels/grade1_counting_08.tres",
+                                                               "unit_id":  "g1_counting_extend",
+                                                               "difficulty_role":  "applied_practice"
+                                                           },
+                                                           {
+                                                               "id":  "count_09",
+                                                               "resource_path":  "res://data/levels/grade1_counting_09.tres",
+                                                               "unit_id":  "g1_counting_mastery",
+                                                               "difficulty_role":  "mixed_challenge"
+                                                           },
+                                                           {
+                                                               "id":  "count_10",
+                                                               "resource_path":  "res://data/levels/grade1_counting_10.tres",
+                                                               "unit_id":  "g1_counting_mastery",
+                                                               "difficulty_role":  "boss"
+                                                           }
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "addition",
+                                            "title":  "Addition Bridge",
+                                            "theme":  "Separated stones join into visible sums and support a bridge.",
+                                            "concept_name":  "addition",
+                                            "entry_unit_id":  "g1_addition_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "counting",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  true
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g1_addition_intro",
+                                                              "title":  "Join Small Groups",
+                                                              "learning_goal":  "See addition as combining matched values.",
+                                                              "mechanic_focus":  "running total",
+                                                              "tutorial_beats":  [
+                                                                                     "sum matched tiles",
+                                                                                     "reach a visible total",
+                                                                                     "prefer larger matches"
+                                                                                 ]
+                                                          },
+                                                          {
+                                                              "id":  "g1_addition_make10",
+                                                              "title":  "Reach Friendly Totals",
+                                                              "learning_goal":  "Build sums that feel useful and fast.",
+                                                              "mechanic_focus":  "optimization",
+                                                              "tutorial_beats":  [
+                                                                                     "plan one move ahead",
+                                                                                     "make bigger groups",
+                                                                                     "finish in fewer moves"
+                                                                                 ]
+                                                          },
+                                                          {
+                                                              "id":  "g1_addition_mastery",
+                                                              "title":  "Bridge Mastery",
+                                                              "learning_goal":  "Use bigger matches and efficient move use.",
+                                                              "mechanic_focus":  "mastery",
+                                                              "tutorial_beats":  [
+                                                                                     "mix easy and hard totals",
+                                                                                     "finish under tighter limits",
+                                                                                     "prepare for repeated groups"
+                                                                                 ]
+                                                          }
+                                                      ],
+                                            "restoration_tasks":  [
+                                                                      {
+                                                                          "id":  "add_pillars",
+                                                                          "chapter_id":  "addition",
+                                                                          "title":  "Raise Bridge Pillars",
+                                                                          "description":  "Stone supports rise as sums become stable.",
+                                                                          "cost":  4
+                                                                      },
+                                                                      {
+                                                                          "id":  "add_arch",
+                                                                          "chapter_id":  "addition",
+                                                                          "title":  "Complete the Main Arch",
+                                                                          "description":  "Balanced sums hold the bridge together.",
+                                                                          "cost":  8
+                                                                      },
+                                                                      {
+                                                                          "id":  "add_caravan",
+                                                                          "chapter_id":  "addition",
+                                                                          "title":  "Open the Trade Route",
+                                                                          "description":  "Travelers cross when the bridge is fully restored.",
+                                                                          "cost":  12
+                                                                      }
+                                                                  ],
+                                            "levels":  [
+                                                           {
+                                                               "id":  "add_01",
+                                                               "resource_path":  "res://data/levels/grade1_addition_01.tres",
+                                                               "unit_id":  "g1_addition_intro",
+                                                               "difficulty_role":  "introduction"
+                                                           },
+                                                           {
+                                                               "id":  "add_02",
+                                                               "resource_path":  "res://data/levels/grade1_addition_02.tres",
+                                                               "unit_id":  "g1_addition_intro",
+                                                               "difficulty_role":  "guided_discovery"
+                                                           },
+                                                           {
+                                                               "id":  "add_03",
+                                                               "resource_path":  "res://data/levels/grade1_addition_03.tres",
+                                                               "unit_id":  "g1_addition_intro",
+                                                               "difficulty_role":  "practice"
+                                                           },
+                                                           {
+                                                               "id":  "add_04",
+                                                               "resource_path":  "res://data/levels/grade1_addition_04.tres",
+                                                               "unit_id":  "g1_addition_make10",
+                                                               "difficulty_role":  "variation"
+                                                           },
+                                                           {
+                                                               "id":  "add_05",
+                                                               "resource_path":  "res://data/levels/grade1_addition_05.tres",
+                                                               "unit_id":  "g1_addition_make10",
+                                                               "difficulty_role":  "challenge"
+                                                           },
+                                                           {
+                                                               "id":  "add_06",
+                                                               "resource_path":  "res://data/levels/grade1_addition_06.tres",
+                                                               "unit_id":  "g1_addition_make10",
+                                                               "difficulty_role":  "reward"
+                                                           },
+                                                           {
+                                                               "id":  "add_07",
+                                                               "resource_path":  "res://data/levels/grade1_addition_07.tres",
+                                                               "unit_id":  "g1_addition_mastery",
+                                                               "difficulty_role":  "new_twist"
+                                                           },
+                                                           {
+                                                               "id":  "add_08",
+                                                               "resource_path":  "res://data/levels/grade1_addition_08.tres",
+                                                               "unit_id":  "g1_addition_mastery",
+                                                               "difficulty_role":  "applied_practice"
+                                                           },
+                                                           {
+                                                               "id":  "add_09",
+                                                               "resource_path":  "res://data/levels/grade1_addition_09.tres",
+                                                               "unit_id":  "g1_addition_mastery",
+                                                               "difficulty_role":  "mixed_challenge"
+                                                           },
+                                                           {
+                                                               "id":  "add_10",
+                                                               "resource_path":  "res://data/levels/grade1_addition_10.tres",
+                                                               "unit_id":  "g1_addition_mastery",
+                                                               "difficulty_role":  "boss"
+                                                           }
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "multiplication",
+                                            "title":  "Multiplication Workshop",
+                                            "theme":  "Equal rows of beams, crates, and tools rebuild the workshop through repeated groups.",
+                                            "concept_name":  "multiplication",
+                                            "entry_unit_id":  "g1_multiplication_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "addition",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  true
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g1_multiplication_intro",
+                                                              "title":  "Equal Groups",
+                                                              "learning_goal":  "See multiplication as repeated equal groups.",
+                                                              "mechanic_focus":  "repeated groups",
+                                                              "tutorial_beats":  [
+                                                                                     "match equal values",
+                                                                                     "notice repeated groups",
+                                                                                     "build product totals"
+                                                                                 ]
+                                                          },
+                                                          {
+                                                              "id":  "g1_multiplication_arrays",
+                                                              "title":  "Array Frames",
+                                                              "learning_goal":  "Read rows and columns as structured groups.",
+                                                              "mechanic_focus":  "array-building",
+                                                              "tutorial_beats":  [
+                                                                                     "prefer bigger repeated groups",
+                                                                                     "stabilize rows",
+                                                                                     "prepare for grade 2 multiplication fluency"
+                                                                                 ]
+                                                          }
+                                                      ],
+                                            "restoration_tasks":  [
+                                                                      {
+                                                                          "id":  "mul_frames",
+                                                                          "chapter_id":  "multiplication",
+                                                                          "title":  "Raise Array Frames",
+                                                                          "description":  "Equal rows of beams turn the yard into a true workshop.",
+                                                                          "cost":  5
+                                                                      },
+                                                                      {
+                                                                          "id":  "mul_crates",
+                                                                          "chapter_id":  "multiplication",
+                                                                          "title":  "Stack Repeating Crates",
+                                                                          "description":  "Supplies line up into repeatable groups.",
+                                                                          "cost":  9
+                                                                      },
+                                                                      {
+                                                                          "id":  "mul_foundry",
+                                                                          "chapter_id":  "multiplication",
+                                                                          "title":  "Open the Array Foundry",
+                                                                          "description":  "The workshop now rebuilds structures through equal groups.",
+                                                                          "cost":  13
+                                                                      }
+                                                                  ],
+                                            "levels":  [
+                                                           {
+                                                               "id":  "mul_01",
+                                                               "resource_path":  "res://data/levels/grade1_multiplication_01.tres",
+                                                               "unit_id":  "g1_multiplication_intro",
+                                                               "difficulty_role":  "introduction"
+                                                           },
+                                                           {
+                                                               "id":  "mul_02",
+                                                               "resource_path":  "res://data/levels/grade1_multiplication_02.tres",
+                                                               "unit_id":  "g1_multiplication_arrays",
+                                                               "difficulty_role":  "practice"
+                                                           }
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "subtraction",
+                                            "title":  "Subtraction Garden",
+                                            "theme":  "Overgrown spaces are cleared by taking away groups.",
+                                            "concept_name":  "subtraction",
+                                            "entry_unit_id":  "g1_sub_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "multiplication",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g1_sub_intro",
+                                                              "title":  "Take Away",
+                                                              "learning_goal":  "See subtraction as removal from a whole.",
+                                                              "mechanic_focus":  "balance down to target"
+                                                          },
+                                                          {
+                                                              "id":  "g1_sub_compare",
+                                                              "title":  "Find the Difference",
+                                                              "learning_goal":  "Compare two visible quantities.",
+                                                              "mechanic_focus":  "difference goals"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "shape_town",
+                                            "title":  "Shape Town",
+                                            "theme":  "Roads and rooftops are rebuilt through pattern and shape clearing.",
+                                            "concept_name":  "shape",
+                                            "entry_unit_id":  "g1_shape_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "subtraction",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g1_shape_intro",
+                                                              "title":  "Basic Shapes",
+                                                              "learning_goal":  "Notice squares, triangles, and circles through board goals.",
+                                                              "mechanic_focus":  "shape clear"
+                                                          },
+                                                          {
+                                                              "id":  "g1_measure_intro",
+                                                              "title":  "Simple Measure",
+                                                              "learning_goal":  "Measure paths with repeated units.",
+                                                              "mechanic_focus":  "distance fill"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "grade2",
+                       "title":  "Grade 2 - Clockwork Harbor",
+                       "theme":  "The harbor runs on bigger numbers, repeated sums, time, money, and measured routes.",
+                       "level_progression_style":  "Introduce larger values, quicker arithmetic, and short planning sequences.",
+                       "mechanic_progression":  [
+                                                    "larger numbers",
+                                                    "addition/subtraction fluency",
+                                                    "equal groups",
+                                                    "time routes",
+                                                    "money bundles",
+                                                    "length comparison"
+                                                ],
+                       "objective_types":  [
+                                               "collect_target",
+                                               "addition_total",
+                                               "subtraction_balance",
+                                               "group_build",
+                                               "route_fill",
+                                               "bundle_value"
+                                           ],
+                       "tutorial_progression":  [
+                                                    "reduce text",
+                                                    "increase symbolic cues",
+                                                    "mix two objective types by the chapter boss"
+                                                ],
+                       "boss_role":  "Mixed arithmetic fluency stage with multiple goals.",
+                       "restoration_hooks":  [
+                                                 "repair harbor clock",
+                                                 "restock market boats",
+                                                 "lay measuring rope"
+                                             ],
+                       "chapters":  [
+                                        {
+                                            "id":  "grade2_numbers",
+                                            "title":  "Place Value Pier",
+                                            "theme":  "Bigger numbers become organized into readable bundles.",
+                                            "concept_name":  "place_value",
+                                            "entry_unit_id":  "g2_numbers_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "shape_town",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  true
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g2_numbers_intro",
+                                                              "title":  "Tens and Ones",
+                                                              "learning_goal":  "Group tiles into tens and ones.",
+                                                              "mechanic_focus":  "bundle_value"
+                                                          },
+                                                          {
+                                                              "id":  "g2_numbers_compare",
+                                                              "title":  "Bigger and Smaller",
+                                                              "learning_goal":  "Compare two larger values.",
+                                                              "mechanic_focus":  "comparison"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade2_addsub",
+                                            "title":  "Harbor Exchange",
+                                            "theme":  "Cargo is combined and removed quickly.",
+                                            "concept_name":  "add_sub_fluency",
+                                            "entry_unit_id":  "g2_addsub_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade2_numbers",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g2_addsub_intro",
+                                                              "title":  "Fast Sums",
+                                                              "learning_goal":  "Build totals efficiently.",
+                                                              "mechanic_focus":  "running total"
+                                                          },
+                                                          {
+                                                              "id":  "g2_addsub_sub",
+                                                              "title":  "Take Away Loads",
+                                                              "learning_goal":  "Reduce to exact targets.",
+                                                              "mechanic_focus":  "subtraction_balance"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade2_groups",
+                                            "title":  "Array Docks",
+                                            "theme":  "Repeated groups prepare the player for multiplication.",
+                                            "concept_name":  "multiplication_intro",
+                                            "entry_unit_id":  "g2_groups_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade2_addsub",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g2_groups_intro",
+                                                              "title":  "Equal Rows",
+                                                              "learning_goal":  "Build repeated groups.",
+                                                              "mechanic_focus":  "group_build"
+                                                          },
+                                                          {
+                                                              "id":  "g2_groups_money",
+                                                              "title":  "Coins and Prices",
+                                                              "learning_goal":  "Use groups to read money values.",
+                                                              "mechanic_focus":  "bundle_value"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade2_measure",
+                                            "title":  "Schedule Street",
+                                            "theme":  "Paths, clocks, and prices make the district run on measurement.",
+                                            "concept_name":  "measurement",
+                                            "entry_unit_id":  "g2_measure_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade2_groups",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g2_measure_intro",
+                                                              "title":  "Length and Time",
+                                                              "learning_goal":  "Fill routes using unit steps and clock targets.",
+                                                              "mechanic_focus":  "route_fill"
+                                                          },
+                                                          {
+                                                              "id":  "g2_shapes",
+                                                              "title":  "Simple Figures",
+                                                              "learning_goal":  "Notice rectangle and line properties through board clears.",
+                                                              "mechanic_focus":  "shape_clear"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "grade3",
+                       "title":  "Grade 3 - Fraction Fields",
+                       "theme":  "Farms, fences, and charts turn arithmetic into grouped production and sharing.",
+                       "level_progression_style":  "Longer cascades, stronger board planning, and first part-whole mechanics.",
+                       "mechanic_progression":  [
+                                                    "multiplication arrays",
+                                                    "division equal sharing",
+                                                    "fraction parts",
+                                                    "perimeter routes",
+                                                    "unit conversion",
+                                                    "table goals"
+                                                ],
+                       "objective_types":  [
+                                               "array_build",
+                                               "equal_split",
+                                               "fraction_fill",
+                                               "perimeter_trace",
+                                               "unit_convert",
+                                               "table_collect"
+                                           ],
+                       "tutorial_progression":  [
+                                                    "show the whole first",
+                                                    "then split it",
+                                                    "then compare different ways to reach the same result"
+                                                ],
+                       "boss_role":  "Tests whether the player can switch between grouping and sharing objectives.",
+                       "restoration_hooks":  [
+                                                 "repair irrigation channels",
+                                                 "raise fence lines",
+                                                 "build record boards"
+                                             ],
+                       "chapters":  [
+                                        {
+                                            "id":  "grade3_multiply",
+                                            "title":  "Harvest Arrays",
+                                            "theme":  "Crops grow in equal rows.",
+                                            "concept_name":  "multiplication",
+                                            "entry_unit_id":  "g3_mult_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade2_measure",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  true
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g3_mult_intro",
+                                                              "title":  "Rows and Columns",
+                                                              "learning_goal":  "See multiplication as equal arrays.",
+                                                              "mechanic_focus":  "array_build"
+                                                          },
+                                                          {
+                                                              "id":  "g3_mult_fluency",
+                                                              "title":  "Times Table Harvest",
+                                                              "learning_goal":  "Recognize common repeated groups fast.",
+                                                              "mechanic_focus":  "combo tables"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade3_divide",
+                                            "title":  "Sharing Barn",
+                                            "theme":  "Supplies must be split evenly.",
+                                            "concept_name":  "division",
+                                            "entry_unit_id":  "g3_div_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade3_multiply",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g3_div_intro",
+                                                              "title":  "Equal Sharing",
+                                                              "learning_goal":  "Make fair groups.",
+                                                              "mechanic_focus":  "equal_split"
+                                                          },
+                                                          {
+                                                              "id":  "g3_div_remainder",
+                                                              "title":  "Sharing Leftovers",
+                                                              "learning_goal":  "Notice when groups do not split evenly yet.",
+                                                              "mechanic_focus":  "remainder awareness"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade3_fraction",
+                                            "title":  "Fraction Orchard",
+                                            "theme":  "Whole fruits split into equal parts.",
+                                            "concept_name":  "fraction_intro",
+                                            "entry_unit_id":  "g3_frac_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade3_divide",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g3_frac_intro",
+                                                              "title":  "Parts of One Whole",
+                                                              "learning_goal":  "Build one whole from equal parts.",
+                                                              "mechanic_focus":  "fraction_fill"
+                                                          },
+                                                          {
+                                                              "id":  "g3_frac_compare",
+                                                              "title":  "Same Whole, Different Parts",
+                                                              "learning_goal":  "Compare basic fractions visually.",
+                                                              "mechanic_focus":  "fraction_compare"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade3_measure_data",
+                                            "title":  "Fence and Ledger",
+                                            "theme":  "Perimeter and data turn the farm into a working district.",
+                                            "concept_name":  "data",
+                                            "entry_unit_id":  "g3_perimeter_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade3_fraction",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g3_perimeter_intro",
+                                                              "title":  "Perimeter Paths",
+                                                              "learning_goal":  "Trace border lengths.",
+                                                              "mechanic_focus":  "perimeter_trace"
+                                                          },
+                                                          {
+                                                              "id":  "g3_table_intro",
+                                                              "title":  "Picture Tables",
+                                                              "learning_goal":  "Collect and compare values like a chart.",
+                                                              "mechanic_focus":  "table_collect"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "grade4",
+                       "title":  "Grade 4 - Decimal Observatory",
+                       "theme":  "A highland observatory is rebuilt with larger numbers, angles, area, graphs, and first decimals.",
+                       "level_progression_style":  "Use board overlays, shape zones, and two-step planning.",
+                       "mechanic_progression":  [
+                                                    "large numbers",
+                                                    "multi-digit operations",
+                                                    "fraction-decimal bridge",
+                                                    "angles",
+                                                    "area fill",
+                                                    "graph pattern goals"
+                                                ],
+                       "objective_types":  [
+                                               "bundle_value",
+                                               "operation_chain",
+                                               "fraction_fill",
+                                               "decimal_collect",
+                                               "angle_align",
+                                               "area_fill",
+                                               "graph_pattern"
+                                           ],
+                       "tutorial_progression":  [
+                                                    "let the player manipulate before naming",
+                                                    "introduce overlays after basics are stable"
+                                                ],
+                       "boss_role":  "Checks transfer between number operations and spatial reasoning.",
+                       "restoration_hooks":  [
+                                                 "align telescope mirrors",
+                                                 "restore floor mosaics",
+                                                 "bring graph terminals online"
+                                             ],
+                       "chapters":  [
+                                        {
+                                            "id":  "grade4_large_numbers",
+                                            "title":  "Thousand Terrace",
+                                            "theme":  "Big values become organized and readable.",
+                                            "concept_name":  "large_numbers",
+                                            "entry_unit_id":  "g4_numbers_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade3_measure_data",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  true
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g4_numbers_intro",
+                                                              "title":  "Large Number Bundles",
+                                                              "learning_goal":  "Read and build larger place values.",
+                                                              "mechanic_focus":  "bundle_value"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade4_operations",
+                                            "title":  "Computation Workshop",
+                                            "theme":  "Machines chain larger additions and subtractions.",
+                                            "concept_name":  "multi_digit_ops",
+                                            "entry_unit_id":  "g4_ops_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade4_large_numbers",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g4_ops_intro",
+                                                              "title":  "Chain the Operation",
+                                                              "learning_goal":  "Work through bigger operations in chunks.",
+                                                              "mechanic_focus":  "operation_chain"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade4_fraction_decimal",
+                                            "title":  "Decimal Springs",
+                                            "theme":  "Water flow shows fractions and decimals as related quantities.",
+                                            "concept_name":  "decimals",
+                                            "entry_unit_id":  "g4_dec_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade4_operations",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g4_dec_intro",
+                                                              "title":  "Tenths and Hundredths",
+                                                              "learning_goal":  "See decimals as parts of a whole.",
+                                                              "mechanic_focus":  "decimal_collect"
+                                                          },
+                                                          {
+                                                              "id":  "g4_frac_bridge",
+                                                              "title":  "Fractions to Decimals",
+                                                              "learning_goal":  "Match equivalent representations.",
+                                                              "mechanic_focus":  "equivalence"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade4_space_data",
+                                            "title":  "Angle Plaza",
+                                            "theme":  "Area, angles, and graph patterns restore the observatory floor.",
+                                            "concept_name":  "geometry",
+                                            "entry_unit_id":  "g4_angle_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade4_fraction_decimal",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g4_angle_intro",
+                                                              "title":  "Turn and Align",
+                                                              "learning_goal":  "Recognize angle sizes through board alignments.",
+                                                              "mechanic_focus":  "angle_align"
+                                                          },
+                                                          {
+                                                              "id":  "g4_area_intro",
+                                                              "title":  "Cover the Floor",
+                                                              "learning_goal":  "Measure area by filling regions.",
+                                                              "mechanic_focus":  "area_fill"
+                                                          },
+                                                          {
+                                                              "id":  "g4_graph_intro",
+                                                              "title":  "Pattern Graphs",
+                                                              "learning_goal":  "Read change through chart-style goals.",
+                                                              "mechanic_focus":  "graph_pattern"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "grade5",
+                       "title":  "Grade 5 - Ratio Reservoir",
+                       "theme":  "The reservoir runs on precise fractions, decimals, divisors, multiples, and volume.",
+                       "level_progression_style":  "Use layered goals and more optimization pressure for 3-star play.",
+                       "mechanic_progression":  [
+                                                    "fraction operations",
+                                                    "decimal operations",
+                                                    "common factors",
+                                                    "volume fill",
+                                                    "average balancing",
+                                                    "data reasoning"
+                                                ],
+                       "objective_types":  [
+                                               "fraction_fill",
+                                               "decimal_collect",
+                                               "common_multiple",
+                                               "volume_fill",
+                                               "average_balance",
+                                               "data_optimize"
+                                           ],
+                       "tutorial_progression":  [
+                                                    "introduce representations visually",
+                                                    "then demand efficient choice making"
+                                                ],
+                       "boss_role":  "Mixed problem-solving stage with optimization-heavy star goals.",
+                       "restoration_hooks":  [
+                                                 "open water gates",
+                                                 "balance storage tanks",
+                                                 "activate analysis hall"
+                                             ],
+                       "chapters":  [
+                                        {
+                                            "id":  "grade5_fraction",
+                                            "title":  "Fraction Reservoir",
+                                            "theme":  "Water basins fill in equivalent parts.",
+                                            "concept_name":  "fraction_ops",
+                                            "entry_unit_id":  "g5_frac_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade4_space_data",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  true
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g5_frac_intro",
+                                                              "title":  "Equivalent Fractions",
+                                                              "learning_goal":  "Build the same whole in multiple ways.",
+                                                              "mechanic_focus":  "fraction_fill"
+                                                          },
+                                                          {
+                                                              "id":  "g5_frac_add",
+                                                              "title":  "Combine Fractions",
+                                                              "learning_goal":  "Add compatible parts to reach targets.",
+                                                              "mechanic_focus":  "fraction_operation"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade5_decimal",
+                                            "title":  "Decimal Channel",
+                                            "theme":  "Flow meters show precise decimal change.",
+                                            "concept_name":  "decimal_ops",
+                                            "entry_unit_id":  "g5_dec_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade5_fraction",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g5_dec_intro",
+                                                              "title":  "Decimal Moves",
+                                                              "learning_goal":  "Operate with tenths and hundredths.",
+                                                              "mechanic_focus":  "decimal_collect"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade5_divisors",
+                                            "title":  "Factor Station",
+                                            "theme":  "Machines run only when values group cleanly.",
+                                            "concept_name":  "factors",
+                                            "entry_unit_id":  "g5_factor_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade5_decimal",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g5_factor_intro",
+                                                              "title":  "Common Factors and Multiples",
+                                                              "learning_goal":  "Choose values that fit together.",
+                                                              "mechanic_focus":  "common_multiple"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade5_volume_data",
+                                            "title":  "Storage Dome",
+                                            "theme":  "Containers, averages, and data restore the final systems.",
+                                            "concept_name":  "volume",
+                                            "entry_unit_id":  "g5_volume_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade5_divisors",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g5_volume_intro",
+                                                              "title":  "Volume Fill",
+                                                              "learning_goal":  "Pack space with efficient shapes and values.",
+                                                              "mechanic_focus":  "volume_fill"
+                                                          },
+                                                          {
+                                                              "id":  "g5_average_intro",
+                                                              "title":  "Balance the Reservoir",
+                                                              "learning_goal":  "Move values toward a common average.",
+                                                              "mechanic_focus":  "average_balance"
+                                                          },
+                                                          {
+                                                              "id":  "g5_data_intro",
+                                                              "title":  "Analyze the System",
+                                                              "learning_goal":  "Use data goals and limited moves to optimize.",
+                                                              "mechanic_focus":  "data_optimize"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "grade6",
+                       "title":  "Grade 6 - Skycity of Proportion",
+                       "theme":  "The final city is restored through proportional reasoning, percentage, circle area, solid figures, average, and chance.",
+                       "level_progression_style":  "Tighter optimization, layered goals, and mastery-focused boss stages.",
+                       "mechanic_progression":  [
+                                                    "fraction division",
+                                                    "ratio and rate",
+                                                    "percent conversion",
+                                                    "circle area",
+                                                    "solid figures",
+                                                    "average",
+                                                    "probability patterns"
+                                                ],
+                       "objective_types":  [
+                                               "equal_split",
+                                               "ratio_balance",
+                                               "percent_fill",
+                                               "circle_cover",
+                                               "solid_pack",
+                                               "average_balance",
+                                               "probability_target"
+                                           ],
+                       "tutorial_progression":  [
+                                                    "use prior systems as shorthand",
+                                                    "show fewer prompts",
+                                                    "let mastery come from stage design"
+                                                ],
+                       "boss_role":  "Final mastery stages combine representation switching and optimization.",
+                       "restoration_hooks":  [
+                                                 "raise sky bridges",
+                                                 "restore central observatory",
+                                                 "power the chance engine"
+                                             ],
+                       "chapters":  [
+                                        {
+                                            "id":  "grade6_fraction_division",
+                                            "title":  "Sharing Heights",
+                                            "theme":  "Complex sharing lifts platforms into place.",
+                                            "concept_name":  "fraction_division",
+                                            "entry_unit_id":  "g6_fracdiv_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade5_volume_data",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  true
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g6_fracdiv_intro",
+                                                              "title":  "Divide Fractions",
+                                                              "learning_goal":  "Treat division as repeated partitioning.",
+                                                              "mechanic_focus":  "equal_split"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade6_ratio",
+                                            "title":  "Ratio Boulevard",
+                                            "theme":  "City systems balance ingredients, speeds, and exchange rates.",
+                                            "concept_name":  "ratio",
+                                            "entry_unit_id":  "g6_ratio_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade6_fraction_division",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g6_ratio_intro",
+                                                              "title":  "Keep the Ratio",
+                                                              "learning_goal":  "Maintain proportional balance.",
+                                                              "mechanic_focus":  "ratio_balance"
+                                                          },
+                                                          {
+                                                              "id":  "g6_percent_intro",
+                                                              "title":  "Percent Signals",
+                                                              "learning_goal":  "Read percents as filled parts of 100.",
+                                                              "mechanic_focus":  "percent_fill"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade6_geometry",
+                                            "title":  "Circle and Tower Ward",
+                                            "theme":  "Curves and solids complete the skyline.",
+                                            "concept_name":  "advanced_geometry",
+                                            "entry_unit_id":  "g6_circle_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade6_ratio",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g6_circle_intro",
+                                                              "title":  "Circle Area",
+                                                              "learning_goal":  "Estimate and cover circular regions.",
+                                                              "mechanic_focus":  "circle_cover"
+                                                          },
+                                                          {
+                                                              "id":  "g6_solid_intro",
+                                                              "title":  "Solid Figures",
+                                                              "learning_goal":  "Pack and compare 3D structures through layered board zones.",
+                                                              "mechanic_focus":  "solid_pack"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        },
+                                        {
+                                            "id":  "grade6_average_probability",
+                                            "title":  "Chance Observatory",
+                                            "theme":  "The city predicts outcomes and balances systems.",
+                                            "concept_name":  "probability",
+                                            "entry_unit_id":  "g6_average_intro",
+                                            "starts_unlocked":  false,
+                                            "unlock":  {
+                                                           "chapter_id":  "grade6_geometry",
+                                                           "complete_levels":  true,
+                                                           "complete_restoration":  false
+                                                       },
+                                            "units":  [
+                                                          {
+                                                              "id":  "g6_average_intro",
+                                                              "title":  "Average Balance",
+                                                              "learning_goal":  "Move values toward a shared middle.",
+                                                              "mechanic_focus":  "average_balance"
+                                                          },
+                                                          {
+                                                              "id":  "g6_probability_intro",
+                                                              "title":  "Likely and Unlikely",
+                                                              "learning_goal":  "Read controlled randomness and target outcomes.",
+                                                              "mechanic_focus":  "probability_target"
+                                                          }
+                                                      ],
+                                            "levels":  [
+
+                                                       ]
+                                        }
+                                    ]
+                   }
+               ]
+}
