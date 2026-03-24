@@ -1,4 +1,4 @@
-extends Control
+﻿extends Control
 class_name Match3BoardController
 
 signal header_changed(title: String, goal_text: String, hint_text: String, stats_text: String)
@@ -108,22 +108,44 @@ func _create_tile_node(value: int) -> PanelContainer:
 	tile.size = TILE_SIZE
 	tile.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	var label := Label.new()
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	label.add_theme_color_override("font_color", Color("2f2a24"))
-	tile.add_child(label)
+	var content := VBoxContainer.new()
+	content.alignment = BoxContainer.ALIGNMENT_CENTER
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+
+	var group_label := Label.new()
+	group_label.name = "GroupLabel"
+	group_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	group_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	group_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	group_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	group_label.add_theme_color_override("font_color", Color("5f574f"))
+	group_label.add_theme_font_size_override("font_size", 15)
+
+	var number_label := Label.new()
+	number_label.name = "NumberLabel"
+	number_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	number_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	number_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	number_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	number_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	number_label.add_theme_color_override("font_color", Color("2f2a24"))
+	number_label.add_theme_font_size_override("font_size", 30)
+
+	content.add_child(group_label)
+	content.add_child(number_label)
+	tile.add_child(content)
 
 	_set_tile_value(tile, value)
 	return tile
 
 func _set_tile_value(tile: Control, value: int) -> void:
-	var label := tile.get_child(0) as Label
-	label.text = _format_group_text(value)
+	var content := tile.get_child(0) as VBoxContainer
+	var group_label := content.get_node("GroupLabel") as Label
+	var number_label := content.get_node("NumberLabel") as Label
+	group_label.text = _format_group_icons(value)
+	number_label.text = str(value)
 	tile.add_theme_stylebox_override("panel", _make_tile_style(_get_tile_color(value)))
 
 func _on_tile_pressed(cell: Vector2i) -> void:
@@ -203,20 +225,24 @@ func _resolve_matches(initial_matches: Array) -> void:
 	var cascade_matches: Array = initial_matches
 	var total_progress_gained := 0
 	var cascade_count := 0
+	var latest_message := ""
 
 	while not cascade_matches.is_empty():
 		cascade_count += 1
-		total_progress_gained += ChapterRuleLibrary.collect_progress(level_data, cascade_matches, board_values)
+		var cascade_progress: int = ChapterRuleLibrary.collect_progress(level_data, cascade_matches, board_values)
+		total_progress_gained += cascade_progress
+		goal_progress += cascade_progress
+		latest_message = ChapterRuleLibrary.get_progress_message(level_data, cascade_progress, cascade_matches, board_values)
 		await _animate_match_clear(cascade_matches)
 		await _collapse_board_with_animation()
 		await _fill_empty_cells_with_animation()
 		cascade_matches = _find_all_matches()
 
-	goal_progress += total_progress_gained
-	var message := ChapterRuleLibrary.get_progress_message(level_data, total_progress_gained)
+	if latest_message == "":
+		latest_message = ChapterRuleLibrary.get_progress_message(level_data, total_progress_gained)
 	if cascade_count > 1:
-		message += " Cascade x%d." % cascade_count
-	message_changed.emit(message)
+		latest_message += " Cascade x%d." % cascade_count
+	message_changed.emit(latest_message)
 
 func _animate_match_clear(matches: Array) -> void:
 	for cell in matches:
@@ -440,11 +466,11 @@ func _get_cell_at_global_position(mouse_global_position: Vector2) -> Vector2i:
 				return Vector2i(x, y)
 	return Vector2i(-1, -1)
 
-func _format_group_text(value: int) -> String:
+func _format_group_icons(value: int) -> String:
 	var icons: Array[String] = []
 	for _i in range(value):
 		icons.append("o")
-	return "%s\n\n%d" % [" ".join(icons), value]
+	return " ".join(icons)
 
 func _get_tile_color(value: int) -> Color:
 	return VALUE_COLORS.get(value, TILE_BASE)
@@ -488,3 +514,4 @@ func _wait(seconds: float) -> void:
 
 func _anim(seconds: float) -> float:
 	return seconds * ANIM_SPEED_SCALE
+

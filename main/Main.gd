@@ -153,3 +153,5 @@ func _on_chapter_unlocked(chapter_id: String) -> void:
 		DialogueManager.show_text("New unit unlocked.\n\nAddition Bridge is now available.")
 	elif chapter_id == "multiplication":
 		DialogueManager.show_text("New unit unlocked.\n\nMultiplication Workshop is now available.")
+	elif chapter_id == "grade3_multiply":
+		DialogueManager.show_text("Prototype unlocked.\n\nGrade 3 Harvest Arrays is now available.")

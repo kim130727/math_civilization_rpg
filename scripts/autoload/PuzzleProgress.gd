@@ -71,6 +71,7 @@ var _level_cache: Dictionary = {}
 func _ready() -> void:
 	_load_curriculum_manifest()
 	_load_progress()
+	_ensure_prototype_unlocks()
 	_unlock_chapter_concept("counting")
 
 func get_curriculum_manifest() -> Dictionary:
@@ -350,3 +351,7 @@ func _load_progress() -> void:
 		for chapter_id in saved_unlocks.keys():
 			unlocked_chapters[String(chapter_id)] = bool(saved_unlocks[chapter_id])
 	unlocked_chapters["counting"] = true
+
+func _ensure_prototype_unlocks() -> void:
+	if _chapters_by_id.has("grade3_multiply"):
+		unlocked_chapters["grade3_multiply"] = true

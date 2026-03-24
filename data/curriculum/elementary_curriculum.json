@@ -643,7 +643,7 @@
                                             "theme":  "Crops grow in equal rows.",
                                             "concept_name":  "multiplication",
                                             "entry_unit_id":  "g3_mult_intro",
-                                            "starts_unlocked":  false,
+                                            "starts_unlocked":  true,
                                             "unlock":  {
                                                            "chapter_id":  "grade2_measure",
                                                            "complete_levels":  true,
@@ -664,8 +664,48 @@
                                                           }
                                                       ],
                                             "levels":  [
-
-                                                       ]
+                                                           {
+                                                               "id":  "g3_mul_01",
+                                                               "resource_path":  "res://data/levels/grade3_multiplication_01.tres",
+                                                               "unit_id":  "g3_mult_intro",
+                                                               "difficulty_role":  "introduction"
+                                                           },
+                                                           {
+                                                               "id":  "g3_mul_02",
+                                                               "resource_path":  "res://data/levels/grade3_multiplication_02.tres",
+                                                               "unit_id":  "g3_mult_intro",
+                                                               "difficulty_role":  "practice"
+                                                           },
+                                                           {
+                                                               "id":  "g3_mul_03",
+                                                               "resource_path":  "res://data/levels/grade3_multiplication_03.tres",
+                                                               "unit_id":  "g3_mult_fluency",
+                                                               "difficulty_role":  "challenge"
+                                                           }
+                                                       ],
+                                            "restoration_tasks":  [
+                                                                      {
+                                                                          "id":  "g3_mul_fields",
+                                                                          "chapter_id":  "grade3_multiply",
+                                                                          "title":  "Restore Harvest Rows",
+                                                                          "description":  "Crop beds are laid out in equal rows so groups become visible.",
+                                                                          "cost":  4
+                                                                      },
+                                                                      {
+                                                                          "id":  "g3_mul_barn",
+                                                                          "chapter_id":  "grade3_multiply",
+                                                                          "title":  "Open the Array Barn",
+                                                                          "description":  "Crates and tools line up in repeatable columns.",
+                                                                          "cost":  8
+                                                                      },
+                                                                      {
+                                                                          "id":  "g3_mul_board",
+                                                                          "chapter_id":  "grade3_multiply",
+                                                                          "title":  "Raise Times Table Board",
+                                                                          "description":  "The district now records repeated groups as stable multiplication patterns.",
+                                                                          "cost":  12
+                                                                      }
+                                                                  ]
                                         },
                                         {
                                             "id":  "grade3_divide",

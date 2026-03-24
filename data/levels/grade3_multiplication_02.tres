@@ -1,0 +1,20 @@
+﻿[gd_resource type="Resource" script_class="MathLevelData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/puzzle/MathLevelData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+level_id = "g3_mul_02"
+title = "2. Four-Column Field"
+grade_id = "grade3"
+chapter_id = "grade3_multiply"
+unit_id = "g3_mult_intro"
+rule_type = "multiplication_total"
+board_width = 6
+board_height = 6
+palette = Array[int]([3, 4, 5])
+goal_target_value = 4
+goal_target_amount = 24
+move_limit = 10
+hint = "Only groups of 4 count. Build equal groups like 4 x 3 or 4 x 4."
+star_thresholds = Array[int]([4, 2])

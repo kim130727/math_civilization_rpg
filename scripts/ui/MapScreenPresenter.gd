@@ -49,12 +49,14 @@ func _rebuild_chapter_tabs(current_chapter_id: String, on_switch_chapter: Callab
 	for child in chapter_tabs.get_children():
 		child.queue_free()
 
-	var current_grade_id := String(PuzzleProgress.get_chapter(current_chapter_id).get("grade_id", "grade1"))
-	for chapter in PuzzleProgress.get_chapters_for_grade(current_grade_id):
+	for chapter in PuzzleProgress.get_chapter_list():
 		var chapter_id: String = chapter["id"]
+		if not PuzzleProgress.is_chapter_unlocked(chapter_id) and chapter_id != current_chapter_id:
+			continue
 		var button := Button.new()
-		button.text = chapter["title"]
-		button.custom_minimum_size = Vector2(180, 42)
+		var grade_title: String = String(PuzzleProgress.get_grade(String(chapter.get("grade_id", ""))).get("title", ""))
+		button.text = chapter["title"] if grade_title == "" else "%s\n%s" % [grade_title, chapter["title"]]
+		button.custom_minimum_size = Vector2(200, 56)
 		button.disabled = not PuzzleProgress.is_chapter_unlocked(chapter_id) or chapter_id == current_chapter_id
 		button.pressed.connect(on_switch_chapter.bind(chapter_id))
 		chapter_tabs.add_child(button)
@@ -111,6 +113,13 @@ func _refresh_restoration_preview(current_chapter_id: String) -> void:
 				restoration_preview_label.text = "[Working Yard]\nFrames and crates line up in repeatable rows."
 			else:
 				restoration_preview_label.text = "[Array Foundry]\nThe workshop now builds structures in stable repeated patterns."
+		"grade3_multiply":
+			if ratio <= 0.0:
+				restoration_preview_label.text = "[Bare Fields]\nThe farm plots exist, but the rows are not organized into equal arrays yet."
+			elif ratio < 0.67:
+				restoration_preview_label.text = "[Growing Arrays]\nCrop beds and crates begin lining up into stable rows and columns."
+			else:
+				restoration_preview_label.text = "[Harvest Arrays Complete]\nThe district now shows multiplication through visible repeated groups."
 		_:
 			if ratio <= 0.0:
 				restoration_preview_label.text = "[Foggy Square]\nSigns are blurred and objects are mixed together.\nNothing is easy to count yet."
@@ -120,7 +129,9 @@ func _refresh_restoration_preview(current_chapter_id: String) -> void:
 				restoration_preview_label.text = "[Counting Village Complete]\nThe plaza, lantern rows, and market are fully restored."
 
 func _refresh_footer(current_chapter_id: String) -> void:
-	if PuzzleProgress.is_chapter_unlocked("multiplication"):
+	if PuzzleProgress.is_chapter_unlocked("grade3_multiply"):
+		footer_label.text = "Grade 3 multiplication prototype is available. Try repeated-group play in Harvest Arrays."
+	elif PuzzleProgress.is_chapter_unlocked("multiplication"):
 		footer_label.text = "Multiplication Workshop is unlocked. Repeated groups now rebuild the world."
 	elif PuzzleProgress.is_chapter_unlocked("addition"):
 		footer_label.text = "Addition Bridge is unlocked. Grade 1 now expands from counting into visible sums."
